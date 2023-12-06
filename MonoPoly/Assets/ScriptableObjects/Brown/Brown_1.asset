@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e0dfe4b3889df844ae7f3854c1a681b, type: 3}
+  m_Name: Brown_1
+  m_EditorClassIdentifier: 
+  landMaterial: {fileID: 2100000, guid: cfa2be002b437ca4183bb71aa706181f, type: 2}
+  landName: tarkint omik
+  landValue: 50
+  mortgageRevenue: 50
+  redeemFee: 60
+  landType: 1
+  rent: 0a0000005a0000008c000000dc000000c2010000

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e0dfe4b3889df844ae7f3854c1a681b, type: 3}
+  m_Name: Green_1
+  m_EditorClassIdentifier: 
+  landMaterial: {fileID: 2100000, guid: 8cfa5468d27a1dd4082252b20feae166, type: 2}
+  landName: A F H  NIGGAS
+  landValue: 130
+  mortgageRevenue: 100
+  redeemFee: 110
+  landType: 3
+  rent: 320000004600000064000000c8000000bc020000

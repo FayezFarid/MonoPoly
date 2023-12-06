@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e0dfe4b3889df844ae7f3854c1a681b, type: 3}
+  m_Name: TestLand
+  m_EditorClassIdentifier: 
+  landMaterial: {fileID: 2100000, guid: 35774323e3c2fb045b75c2d8a2bbef3b, type: 2}
+  landName: asba
+  landValue: 100
+  moneyToUpgrade: 0
+  mortgageRevenue: 0
+  redeemFee: 0
+  landType: 0
+  rent: 0a0000001400000064000000c800000090010000

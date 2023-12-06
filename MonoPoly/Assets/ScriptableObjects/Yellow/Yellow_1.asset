@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e0dfe4b3889df844ae7f3854c1a681b, type: 3}
+  m_Name: Yellow_1
+  m_EditorClassIdentifier: 
+  landMaterial: {fileID: 2100000, guid: ad6753dd568c28c4e81877e4ece66ef8, type: 2}
+  landName: zabour 3abla
+  landValue: 140
+  mortgageRevenue: 120
+  redeemFee: 130
+  landType: 4
+  rent: 3200000096000000e60000009001000020030000

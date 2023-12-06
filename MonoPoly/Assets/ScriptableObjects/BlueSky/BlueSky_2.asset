@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e0dfe4b3889df844ae7f3854c1a681b, type: 3}
+  m_Name: BlueSky_2
+  m_EditorClassIdentifier: 
+  landMaterial: {fileID: 2100000, guid: 33205894b23f9d54eb1286f26b379b3c, type: 2}
+  landName: 7ay menzah 2
+  landValue: 100
+  mortgageRevenue: 40
+  redeemFee: 50
+  landType: 2
+  rent: 2800000078000000c80000002c01000058020000
