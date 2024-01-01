@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1dc469e9aec62948bf1d32695c417a2, type: 3}
+  m_Name: AllOutEvent_Tile
+  m_EditorClassIdentifier: 
+  landMaterial: {fileID: 2100000, guid: c3cb0d5df6908814eb9971b105f2104c, type: 2}
+  eventType: 0
+  eventDefinitions:
+  - {fileID: 11400000, guid: 2ea3c67bad4d12a46aac728416c613ec, type: 2}
+  - {fileID: 11400000, guid: 946bc1092822870438e3b3b45c1fec79, type: 2}
+  - {fileID: 11400000, guid: 01b8d0a890c7f9e4aa781f4254aead03, type: 2}
+  - {fileID: 11400000, guid: dfbe944437292eb4596a7900d8961c4e, type: 2}
+  - {fileID: 11400000, guid: 2540749bb4e922e42ae70b1e77a0629d, type: 2}

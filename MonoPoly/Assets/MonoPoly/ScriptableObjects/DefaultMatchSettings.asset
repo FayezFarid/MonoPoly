@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 381eea5899a4f94438eef076ed344737, type: 3}
+  m_Name: DefaultMatchSettings
+  m_EditorClassIdentifier: 
+  HighlightColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  DeHighlightColor:
+    serializedVersion: 2
+    rgba: 2439670378
+  MortgageColor:
+    serializedVersion: 2
+    rgba: 1763515874
+  PlayerPossibleColors:
+  - serializedVersion: 2
+    rgba: 4278190335
+  - serializedVersion: 2
+    rgba: 4294967295
+  - serializedVersion: 2
+    rgba: 4278779648
+  - serializedVersion: 2
+    rgba: 4294901760
+  LandColors:
+  - serializedVersion: 2
+    rgba: 4294901503
+  - serializedVersion: 2
+    rgba: 4278255368
+  - serializedVersion: 2
+    rgba: 4294901765
+  - serializedVersion: 2
+    rgba: 4278190335
+  DefaultColor: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 0.7372549}
+  PlayerLostColor: {r: 1, g: 0, b: 0, a: 1}
+  PlayerTurnColor: {r: 0, g: 1, b: 0, a: 1}
+  playerInfoCard: {fileID: 6655479004032260836, guid: f2b72de428c83114ea2783495605001f, type: 3}
+  dicePrefab: {fileID: 4736684505242452204, guid: c7675d177a715e348afc15f0fd5012b2, type: 3}
+  playerPrefab: {fileID: 8596901552655055376, guid: 16122a274c2438c499fae0765c18ec6c, type: 3}
+  moneyCardPopUpPrefab: {fileID: 7857193400223157405, guid: c387340fc65a52840bc72c2c2df3af1c, type: 3}
+  initalMoney: 2000
+  wholeLoopMoney: 200
+  prisonFee: 100
+  playersNumber: 4
+  numberOfDices: 2
+  PlayerMovementSpeed: 10
+  BidIncreasePercentage: 0.2
+  DelayAfterClosingMenu: 2
+  DelayMoneyPopup: 2
+  DelayToCloseEventDescription: 3
+  UseAppropriateColors: 1
