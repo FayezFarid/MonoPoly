@@ -46,8 +46,7 @@ public class MatchSettings : ScriptableObject
     public Color PlayerTurnColor;
 
 
-    [Header("prefabs")] 
-    [SerializeField] private SmallPlayerInfoCard playerInfoCard;
+    [Header("prefabs")] [SerializeField] private SmallPlayerInfoCard playerInfoCard;
     [SerializeField] private GameObject dicePrefab;
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private MoneyPopCard moneyCardPopUpPrefab;
@@ -69,23 +68,24 @@ public class MatchSettings : ScriptableObject
 
 
     [SerializeField] private int playersNumber;
-    [SerializeField] private int numberOfDices=2;
+    [SerializeField] private int numberOfDices = 2;
+    [SerializeField] private float diceRollTime;
 
 
     public int WholeLoopMoney => wholeLoopMoney;
     public int PrisonFee => prisonFee;
-    
+    public float DiceRollTime => diceRollTime;
     public int InitalMoney => initalMoney;
     public int PlayersNumber => playersNumber;
     public float PlayerMovementSpeed;
     [Range(0, 1)] public float BidIncreasePercentage;
     public int NumberOfDices => numberOfDices;
 
-    
-    [Header("Delays")]
-    public float DelayAfterClosingMenu;
-    public float DelayMoneyPopup=2;
-    public float DelayToCloseEventDescription=2;
+
+    [Header("Delays")] public float DelayAfterClosingMenu;
+    public float DelayMoneyPopup = 2;
+    public float DelayToCloseEventDescription = 2;
 
     public bool UseAppropriateColors;
+    [Header("AI")] public float DelayBetweenAction;
 }

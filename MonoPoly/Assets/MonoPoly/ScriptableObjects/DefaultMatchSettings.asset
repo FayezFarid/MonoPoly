@@ -51,9 +51,11 @@ MonoBehaviour:
   prisonFee: 100
   playersNumber: 4
   numberOfDices: 2
-  PlayerMovementSpeed: 10
+  diceRollTime: 1.5
+  PlayerMovementSpeed: 20
   BidIncreasePercentage: 0.2
   DelayAfterClosingMenu: 2
   DelayMoneyPopup: 2
   DelayToCloseEventDescription: 3
   UseAppropriateColors: 1
+  DelayBetweenAction: 4

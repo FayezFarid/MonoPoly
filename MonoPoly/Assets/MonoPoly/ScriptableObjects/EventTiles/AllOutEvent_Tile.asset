@@ -13,10 +13,6 @@ MonoBehaviour:
   m_Name: AllOutEvent_Tile
   m_EditorClassIdentifier: 
   landMaterial: {fileID: 2100000, guid: c3cb0d5df6908814eb9971b105f2104c, type: 2}
-  eventType: 0
+  eventType: 1
   eventDefinitions:
-  - {fileID: 11400000, guid: 2ea3c67bad4d12a46aac728416c613ec, type: 2}
-  - {fileID: 11400000, guid: 946bc1092822870438e3b3b45c1fec79, type: 2}
-  - {fileID: 11400000, guid: 01b8d0a890c7f9e4aa781f4254aead03, type: 2}
-  - {fileID: 11400000, guid: dfbe944437292eb4596a7900d8961c4e, type: 2}
-  - {fileID: 11400000, guid: 2540749bb4e922e42ae70b1e77a0629d, type: 2}
+  - {fileID: 11400000, guid: 9bd565705cde8cc449d68ac84b807ff0, type: 2}

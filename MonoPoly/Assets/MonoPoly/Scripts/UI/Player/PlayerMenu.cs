@@ -15,6 +15,8 @@ public class PlayerMenu : MenuBase
 
     public void InitializeWithPlayers(List<Player> players,GameManager gameManager)
     {
+        PrisonStatusEffectDefinition.CurrentPlayerLeftPrison += CurrentPlayerLeftPrison;
+        PrisonStatusEffectDefinition.CurrentPlayerInPrison += CurrentPlayerInPrison;
         Player.OnPlayerLost+= OnPlayerLost;
         _gameManager = gameManager;
         gameManager.OnNextPlayerTurn+= OnNextPlayerTurn;
@@ -40,6 +42,16 @@ public class PlayerMenu : MenuBase
             _playerInfos.Add(item,playerInfo);
             
         }
+    }
+
+    private void CurrentPlayerInPrison(StatusEffectInstance obj)
+    {
+        _playerInfos[_gameManager.CurrentPlayer].SetPrisonState(true);  
+    }
+
+    private void CurrentPlayerLeftPrison(StatusEffectInstance obj)
+    {
+        _playerInfos[_gameManager.CurrentPlayer].SetPrisonState(false);  
     }
 
     private void OnPlayerLost(Player obj)

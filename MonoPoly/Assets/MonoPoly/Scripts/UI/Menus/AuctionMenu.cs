@@ -31,7 +31,7 @@ public class AuctionMenu : MenuBase
 
     private AuctionMenuInitHandle _initHandle;
 
-    //that is almost becoming sub system it self
+    //this is almost becoming sub system it self
     private Index currentPlayerIndex;
 
     private Dictionary<Player, SmallPlayerInfoCard> _playerInfoCardsMap = new Dictionary<Player, SmallPlayerInfoCard>();

@@ -8,11 +8,13 @@ public enum EffectType
 {
     Prison,
     PrisonPass,
+    NoMoney,
 }
 
 public interface IPlayerCallbacks
 {
     void OnMoneyAdd(ref int moneyValue);
+    void OnMoneyRemoved(ref int moneyValue);
     void OnPlayerTurnStarted();
     void OnPlayerTurnEnded();
 }
@@ -44,13 +46,12 @@ public abstract class StatusEffectDefinition : ScriptableObject, IStatusEffectDe
 
     //Interface?
 
-    public virtual void OnMoneyAdd(StatusEffectInstance instance, ref int moneyValue)
-    {
-    }
+    public abstract void OnMoneyAdd(StatusEffectInstance instance, ref int moneyValue);
+    public abstract void OnMoneyRemoved(StatusEffectInstance instance, ref int moneyValue);
 
-    public virtual void OnPlayerTurnStarted(StatusEffectInstance instance)
-    {
-    }
+    public abstract void OnPlayerTurnStarted(StatusEffectInstance instance);
+
+    public abstract void OnEffectEnded(StatusEffectInstance instance);
 
     public virtual void OnTurnPass(StatusEffectInstance instance)
     {
@@ -67,14 +68,18 @@ public class StatusEffectInstance : IPlayerCallbacks
     private int _currentDuration;
 
     public EffectType EffectType => _statusEffectDefinition.EffectType;
+
     public int CurrentDuration
     {
         get => _currentDuration;
         set
         {
             _currentDuration = value;
-            if (_currentDuration >= _statusEffectDefinition.Duration)
+            if (_currentDuration <= 0)
             {
+                SpicyHarissaLogger.Log(
+                    $"Status Effect  instance ended Current Duration [{_currentDuration}] Def duration [{_statusEffectDefinition.Duration}]",
+                    LogLevel.Verbose);
                 EffectEnded();
             }
         }
@@ -83,7 +88,7 @@ public class StatusEffectInstance : IPlayerCallbacks
     public StatusEffectInstance(StatusEffectDefinition statusEffectDefinition)
     {
         _statusEffectDefinition = statusEffectDefinition;
-        _currentDuration = 0;
+        _currentDuration = _statusEffectDefinition.Duration;
     }
 
     #region IPlayerCallbacks
@@ -91,6 +96,11 @@ public class StatusEffectInstance : IPlayerCallbacks
     public void OnMoneyAdd(ref int moneyValue)
     {
         _statusEffectDefinition.OnMoneyAdd(this, ref moneyValue);
+    }
+
+    public void OnMoneyRemoved(ref int moneyValue)
+    {
+        _statusEffectDefinition.OnMoneyRemoved(this, ref moneyValue);
     }
 
     public void OnPlayerTurnStarted()
@@ -105,8 +115,9 @@ public class StatusEffectInstance : IPlayerCallbacks
 
     #endregion
 
-    private void EffectEnded()
+    public void EffectEnded()
     {
+        _statusEffectDefinition.OnEffectEnded(this);
         OnEffectEnded?.Invoke(this);
     }
 }

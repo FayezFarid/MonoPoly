@@ -14,7 +14,7 @@ public struct Index
         get { return _maxLength; }
         set
         {
-            _maxLength = value;
+            _maxLength = value-1;
             if (_index_Primitive == value)
             {
                 _index_Primitive = 0;

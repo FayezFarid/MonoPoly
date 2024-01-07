@@ -13,6 +13,7 @@ public class PlayerInfo : CardBase
     [SerializeField] private TextMeshProUGUI playerNameText;
     [SerializeField] private TextMeshProUGUI moneyText;
     [SerializeField] private Image playerColor;
+    [SerializeField] private Image prisonImage;
     private Button _button;
     private Image _parentImage;
 
@@ -29,19 +30,24 @@ public class PlayerInfo : CardBase
         playerColor.color = playerData.PlayerColor;
     }
 
-    public void SetMoney(int Money)
+    public void SetMoney(int money)
     {
-        moneyText.text = Money.ToString();
+        moneyText.text = money.ToString();
     }
 
-    public void SetPlayerName(string PlayerName)
+    public void SetPlayerName(string playerName)
     {
-        playerNameText.text = PlayerName;
+        playerNameText.text = playerName;
     }
 
     public void SetColor(Color color)
     {
         _parentImage.color = color;
+    }
+
+    public void SetPrisonState(bool state)
+    {
+        prisonImage.gameObject.SetActive(state);
     }
 
     public void AssignOnClick(Action<PlayerInfo> onclickEvent)

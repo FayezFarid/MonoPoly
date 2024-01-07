@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Start
   m_EditorClassIdentifier: 
   landMaterial: {fileID: 2100000, guid: d1a7a3a723ede34429671668d5f1a06a, type: 2}
-  eventType: 3
+  eventType: 5
   eventDefinitions: []

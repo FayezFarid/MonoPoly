@@ -16,11 +16,12 @@ public class GameDebugger : MonoBehaviour
         new Quaternion(1, 0, 0, 0),
         new Quaternion(0.707f, 0, 0, 0.707f),
     };
+
     public Player TargetPlayer;
     public GameManager GameManager;
 
     [SerializeField] private bool HideGUI = false;
-    
+
 
     public GUIStyle style;
     public GUIStyle SideBarStyle;
@@ -59,6 +60,7 @@ public class GameDebugger : MonoBehaviour
             DrawHiddenGUI();
             return;
         }
+
         Rect boxRect = new Rect(BoxPosition, BoxSize);
         GUI.Box(boxRect, "Debugging ", BackGround);
 
@@ -110,7 +112,10 @@ public class GameDebugger : MonoBehaviour
         buttonRect.position = _newButtonPosition;
         if (GUI.Button(buttonRect, "Fix Dice value", style))
         {
-            GameManager.Dice.FixedDiceValue = FixedDiceValue;
+            // GameManager.Dice.FixedDiceValue = FixedDiceValue;
+
+            GameManager.DiceManager.FixedValue = FixedDiceValue;
+            GameManager.DiceManager.FixValue = FixedDiceValue != 0;
         }
 
         _newSideBarPosition = ExtraHeaderRect.position;
@@ -168,6 +173,7 @@ public class GameDebugger : MonoBehaviour
             HideGUI = false;
         }
     }
+
     private Vector3 lastPos;
     private Vector3 initPos;
 
@@ -197,14 +203,14 @@ public class GameDebugger : MonoBehaviour
             diceRigibody.transform.Rotate(new Vector3(x, y, z), Angle);
             yield return null;
             CurrentTime += Time.deltaTime;
-            Angle -= Angle*0.01f * Time.deltaTime;
+            Angle -= Angle * 0.01f * Time.deltaTime;
         }
         // diceRigibody.rotation=Quaternion.identity;
         //1
         // diceRigibody.Rotate(new Vector3(274f,270,270));
-        
+
         diceRigibody.rotation = StaticDiceRotation[expectedValue - 1];
-        
+
         yield return new WaitForSeconds(1f);
         Debug.Log($"Dice Value [{GetDiceValueRayCast()}]");
     }
@@ -249,7 +255,7 @@ public class GameDebugger : MonoBehaviour
         ray.origin = Camera.main.transform.position;
         // Bit shift the index of the layer (8) to get a bit mask
         int layerMask = 1 << 3;
-        if (Physics.Raycast(ray, out RaycastHit hitInfo, 50,  layerMask))
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, 50, layerMask))
         {
             Debug.Log($"Hit smth name [ {hitInfo.collider.name} ]");
             return 0;

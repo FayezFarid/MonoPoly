@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37a4902b67dbd134a9ebadb309930de7, type: 3}
+  m_Name: ED_3_backward
+  m_EditorClassIdentifier: 
+  Description: Go back 3 steps
+  EffectModifiers:
+  - {fileID: 11400000, guid: f4ba00430c2f6944a8276d2d8580fddc, type: 2}

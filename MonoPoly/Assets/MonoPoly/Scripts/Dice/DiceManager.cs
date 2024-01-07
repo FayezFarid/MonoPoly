@@ -16,19 +16,28 @@ public class DiceManager : MonoBehaviour
         new Quaternion(0.707f, 0, 0, 0.707f),
     };
 
+    public bool FixValue { get; set; } = false;
+    public int FixedValue { get; set; }
+
     [SerializeField] private Vector3 DiceSpawnStartPoint;
     [SerializeField] private Vector3 DiceSpacing;
-    
+
     [SerializeField] private int sides = 6;
     private Transform[] _dices;
-    private Action<int> _onDiceRollCompleted;
+    private Action<int, bool> _onDiceRollCompleted;
+
+    public Action<int, bool> OnDiceRollCompleted
+    {
+        get => _onDiceRollCompleted;
+        set => _onDiceRollCompleted = value;
+    }
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="DiceNumber"></param>
     /// <param name="onDiceRollCompleted"> Int parameter is final value with the sum</param>
-    public void Init(int DiceNumber, Action<int> onDiceRollCompleted)
+    public void Init(int DiceNumber, Action<int, bool> onDiceRollCompleted)
     {
         _onDiceRollCompleted = onDiceRollCompleted;
         _dices = new Transform[DiceNumber];
@@ -39,7 +48,7 @@ public class DiceManager : MonoBehaviour
 
         Vector3 AccumaltedPosition = DiceSpawnStartPoint;
         // _dices[0].position = AccumaltedPosition;
-        
+
         for (int i = 0; i < _dices.Length; i++)
         {
             _dices[i].position = AccumaltedPosition;
@@ -50,6 +59,18 @@ public class DiceManager : MonoBehaviour
     public void RollDice()
     {
         int[] expectedValue = new int[_dices.Length];
+#if UNITY_EDITOR
+        if (FixValue)
+        {
+            for (int i = 0; i < expectedValue.Length; i++)
+            {
+                expectedValue[i] = FixedValue;
+            }
+
+            StartCoroutine(rollDiceCorotuine(expectedValue));
+            return;
+        }
+#endif
         for (int i = 0; i < expectedValue.Length; i++)
         {
             expectedValue[i] = UnityEngine.Random.Range(1, sides + 1);
@@ -73,7 +94,7 @@ public class DiceManager : MonoBehaviour
 
         float CurrentTime = 0;
         float Angle = 180;
-        while (CurrentTime < 3)
+        while (CurrentTime < MatchSettings.SingletonInstance.DiceRollTime)
         {
             for (int i = 0; i < _dices.Length; i++)
             {
@@ -95,15 +116,33 @@ public class DiceManager : MonoBehaviour
         {
             _dices[i].rotation = StaticDiceRotation[expectedValue[i] - 1];
             TotalRollValue += expectedValue[i];
-            
-            Debug.Log($"I [{i}] Value [{expectedValue[i]}] ");
+
+            SpicyHarissaLogger.Log($"I [{i}] Value [{expectedValue[i]}] ", LogLevel.Verbose,
+                SpicyHarissaLogger.DICE_DEBUG_KEY);
+
             // _dices[i].Rotate(Vector3.forward,-90);
         }
 
         yield return new WaitForSeconds(1f);
 
-        _onDiceRollCompleted?.Invoke(TotalRollValue);
+
+        _onDiceRollCompleted?.Invoke(TotalRollValue, AreDicesEqual(expectedValue));
 
         //Cleanup
+    }
+
+    private bool AreDicesEqual(int[] expectedValue)
+    {
+        bool AreEquals = true;
+        int FirstValue = expectedValue[0];
+        for (int i = 1; i < expectedValue.Length; i++)
+        {
+            if (FirstValue != expectedValue[i])
+            {
+                return false;
+            }
+        }
+
+        return AreEquals;
     }
 }

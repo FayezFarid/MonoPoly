@@ -151,7 +151,7 @@ public class LandTitleInstance : TileInstance
     public bool HasHouses => _currentRank.CurrentIndex > 0;
     public bool IsOwned => Owner != null;
     public bool IsStation => LandDef.LandType == LandTypes.Station;
-    public int GetRent => _landDef.Rent[_currentRank.CurrentIndex];
+    public virtual int GetRent => _landDef.Rent[_currentRank.CurrentIndex];
 
 
     public LandTitleInstance(TileDefinition landdef, TileLand tileLand)

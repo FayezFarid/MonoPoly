@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7f669a6624a3754085984dcbba99841, type: 3}
+  m_Name: EEP_Telport_39
+  m_EditorClassIdentifier: 
+  EffectModifiers:
+  - playerTarget: 1
+    SecondaryPlayerTarget: 0
+    modifierType: 0
+    value: 39

@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
 
     public Action<Player /*New player*/> OnNextPlayerTurn;
     public Action<CurrentState /* New state*/> OnCurrentStateChanged;
+    public Action<Player, Tile> OnPlayerLandedOnTile;
 
     public static Action<GameManager /* The Game Manager Instance*/> OnGameOver;
 
@@ -51,6 +52,9 @@ public class GameManager : MonoBehaviour
     public ScreenMode ScreenMode => _screenMode;
 
     [SerializeField] private DiceManager _diceManager;
+#if UNITY_EDITOR
+    public DiceManager DiceManager => _diceManager;
+#endif
 
     #endregion
 
@@ -112,6 +116,8 @@ public class GameManager : MonoBehaviour
 
         foreach (Player playerItem in allPlayers)
         {
+            // playerItem.GetComponent<AIController>().Active = true;
+
             PlacePlayer(playerItem, 39);
         }
 
@@ -262,6 +268,7 @@ public class GameManager : MonoBehaviour
 
         return false;
     }
+
     public void ChangeToSellHouses()
     {
         if (_currentState == CurrentState.SellHouse)
@@ -270,9 +277,10 @@ public class GameManager : MonoBehaviour
             ScreenMode.ExitMode();
             return;
         }
+
         CurrentState = CurrentState.SellHouse;
         _cachedSellableLands = GetPlayerSellableLands(CurrentPlayer);
-        
+
         _screenMode.ChangeToSellMode(_cachedSellableLands);
     }
 
@@ -316,13 +324,13 @@ public class GameManager : MonoBehaviour
 
     public void ChangeToRedeemMode()
     {
-        
         if (_currentState == CurrentState.Redeem)
         {
             CurrentState = CurrentState.Default;
             ScreenMode.ExitMode();
             return;
         }
+
         CurrentState = CurrentState.Redeem;
 
         _screenMode.ChangeToRedeemMode(_turnManager.CurrentPlayerTurn.OwnedLands);
@@ -340,6 +348,7 @@ public class GameManager : MonoBehaviour
             ScreenMode.ExitMode();
             return;
         }
+
         CurrentState = CurrentState.Mortgage;
 
         _screenMode.ChangeToMortgageMode(_turnManager.CurrentPlayerTurn.OwnedLands);
@@ -390,6 +399,7 @@ public class GameManager : MonoBehaviour
             ScreenMode.ExitMode();
             return;
         }
+
         CurrentState = CurrentState.Upgrading;
 
         _cachedUpgradableTiles = GetPlayerOwnedLandInstanceSet(CurrentPlayer);
@@ -415,6 +425,7 @@ public class GameManager : MonoBehaviour
 
     public void NextPlayerturn()
     {
+        SpicyHarissaLogger.Log("NextPlayer turn", LogLevel.Verbose);
         CurrentState = CurrentState.Default;
         if (CurrentPlayer.OutOfMoney)
         {
@@ -429,14 +440,7 @@ public class GameManager : MonoBehaviour
 
     private void CheckForGameOver()
     {
-        int numberOfPlayerLost = 0;
-
-        foreach (Player player in _turnManager.AllPlayers)
-        {
-            numberOfPlayerLost += player.HasLost ? 1 : 0;
-        }
-
-        if (_turnManager.PlayersCount - numberOfPlayerLost <= 1)
+        if (_turnManager.ActivePlayers.Count <= 1)
         {
             SpicyHarissaLogger.Log($"Game over ", LogLevel.Standard, Color.blue);
             OnGameOver?.Invoke(this);
@@ -452,7 +456,7 @@ public class GameManager : MonoBehaviour
         PrisonMenu.InitPrisonHandle prisonHandle = new PrisonMenu.InitPrisonHandle();
         prisonHandle.CanPayForPrison = !CurrentPlayer.CanNotAfford(matchSettings.PrisonFee);
         //TODO: Add Card.
-        prisonHandle.CanUseCard = false;
+        prisonHandle.CanUseCard = CurrentPlayer.HaveEffectOfType(EffectType.PrisonPass);
         prisonMenu.Init(new InitalizationHandle<PrisonMenu.InitPrisonHandle>(prisonHandle));
     }
 
@@ -460,8 +464,8 @@ public class GameManager : MonoBehaviour
     {
         SpicyHarissaLogger.Log($"Going To Prison", LogLevel.Verbose);
         //TODO: ADD revere movement
-        StartCoroutine(PlacePlayerAnimated(CurrentPlayer, TileManager.PrisonTile,
-            TileManager.GoPrisonTile - TileManager.PrisonTile, true));
+        StartCoroutine(PlacePlayerReverseAnimated(CurrentPlayer, TileManager.PrisonTile,
+            TileManager.GoPrisonTile - TileManager.PrisonTile, 2));
         CurrentPlayer.ApplyEffectToSelf(effectDefinition);
     }
 
@@ -482,6 +486,26 @@ public class GameManager : MonoBehaviour
     public void PlayerRollForPrison()
     {
         // RollDice()   
+        DiceManager.OnDiceRollCompleted = null;
+        DiceManager.OnDiceRollCompleted += PlayerRolledForPrison;
+        prisonMenu.CloseWindow();
+    }
+
+    private void PlayerRolledForPrison(int totalValue, bool equalDice)
+    {
+        //Assuming menu already closed
+        DiceManager.OnDiceRollCompleted = null;
+        DiceManager.OnDiceRollCompleted += OnDiceRolled;
+        if (equalDice)
+        {
+            CurrentPlayer.RemoveEffectByType(EffectType.Prison);
+            CurrentPlayer.RemoveEffectByType(EffectType.Prison);
+            OnDiceRolled(totalValue, equalDice);
+        }
+        else
+        {
+            NextPlayerturn();
+        }
     }
 
     #endregion
@@ -556,12 +580,6 @@ public class GameManager : MonoBehaviour
 
     private void CurrentPlayerDidWholeLoop()
     {
-        if (_turnManager.CurrentPlayerTurn.IsFirstRoll)
-        {
-            _turnManager.CurrentPlayerTurn.IsFirstRoll = false;
-            return;
-        }
-
         _turnManager.CurrentPlayerTurn.IncreaseMoney(matchSettings.WholeLoopMoney);
     }
 
@@ -569,79 +587,75 @@ public class GameManager : MonoBehaviour
 
     #region Board movments
 
-    private void OnDiceRolled(int totalValue)
-    {
-        SpicyHarissaLogger.Log($"Dice Value [{totalValue}] ", LogLevel.Standard);
-        //Gotta return back to 0 
-        int PositionToPlace = GetNextAvaliableTitle(_turnManager.CurrentPlayerTurn.CurrentPosition, totalValue,
-            _tileManager.TileCount);
-        if (PositionToPlace < _turnManager.CurrentPlayerTurn.CurrentPosition)
-        {
-            CurrentPlayerDidWholeLoop();
-        }
-
-        StartCoroutine(PlacePlayerAnimated(_turnManager.CurrentPlayerTurn, PositionToPlace, totalValue));
-    }
-
     /// <summary>
     /// Moves current Player . rolls dice etc
     /// </summary>
     public void MoveCurrentPlayer()
     {
+        CurrentState = CurrentState.RollingDice;
         _diceManager.RollDice();
     }
-
-
-    public int RollDice()
+    private void OnDiceRolled(int totalValue, bool ValuesAreEual)
     {
-        return dice.Roll();
+        SpicyHarissaLogger.Log($"Dice Value [{totalValue}] ", LogLevel.Standard);
+        //Gotta return back to 0 
+        int PositionToPlace = GetNextAvaliableTitle(_turnManager.CurrentPlayerTurn.CurrentPosition, totalValue,
+            _tileManager.TileCount);
+        // if (PositionToPlace < _turnManager.CurrentPlayerTurn.CurrentPosition)
+        // {
+        //     CurrentPlayerDidWholeLoop();
+        // }
+
+        CurrentPlayer.CanRollAgain = ValuesAreEual;
+        StartCoroutine(PlacePlayerAnimated(_turnManager.CurrentPlayerTurn, PositionToPlace, totalValue));
+    }
+
+ 
+
+    public void PlacePlayerCalcuated(Player player, int TargetPosition, bool inReverse, float ExtraSpeedParamter = 1)
+    {
+        int steps = 0;
+        int currentPosition = player.CurrentPosition;
+        while (TargetPosition != currentPosition)
+        {
+            currentPosition = Extension.GetNextIndex(currentPosition, _tileManager.TileCount);
+            // if (TargetPosition == currentPosition)
+            //     break;
+            steps++;
+        }
+
+        SpicyHarissaLogger.Log($"Steps [{steps}] To Go from [{player.CurrentPosition}] To [{TargetPosition}]",
+            LogLevel.Verbose);
+        if (!inReverse)
+            StartCoroutine(PlacePlayerAnimated(player, TargetPosition, steps, ExtraSpeedParamter));
+        else
+            StartCoroutine(PlacePlayerReverseAnimated(player, TargetPosition, steps, ExtraSpeedParamter));
     }
 
     public IEnumerator PlacePlayerAnimated(Player PlayerToPlace, int TargetPosition, int MovementsSteps,
-        bool inReverse = false)
+        float ExtraSpeedParamter = 1)
     {
         CurrentState = CurrentState.RollingDice;
         int startingPosition = PlayerToPlace.CurrentPosition;
         SpicyHarissaLogger.Log(
             $"PlacePlayerAnimated  previousPosition [{startingPosition}] TargetPosition [{TargetPosition}]",
-            LogLevel.Verbose);
-        // WaitForSeconds waitForSeconds = new WaitForSeconds(matchSettings.DurationBetweenPlayerPlacement);
+            LogLevel.Verbose, SpicyHarissaLogger.MOVEMENT_DEBUG_KEY);
+
         int currentPosition = startingPosition;
         Vector3 previousDirection = _lastSavedDirect;
         float speed = matchSettings.PlayerMovementSpeed;
         for (int i = 1; i <= MovementsSteps; i++)
         {
-            //TODO: Look at next tile.
-            if (inReverse)
-            {
-                currentPosition = GetPreviousAvaliableTile(currentPosition, 1, _tileManager.TileCount);
-            }
-            else
-            {
-                currentPosition = GetNextAvaliableTitle(currentPosition, 1, _tileManager.TileCount);
-            }
-
+            currentPosition = GetNextAvaliableTitle(currentPosition, 1, _tileManager.TileCount);
             Tile tile = _tileManager[currentPosition];
 
-            yield return PlayerRotate(PlayerToPlace.transform, tile.transform, previousDirection);
+            yield return MovePlayer(tile, PlayerToPlace.transform, speed, previousDirection, ExtraSpeedParamter);
 
             previousDirection = PlayerToPlace.transform.position.GetDirection(tile.transform.position);
 
-
-            // _tileManager[i].PlacePlayer(PlayerToPlace.transform);
-            while (Vector3.Distance(PlayerToPlace.transform.position, tile.transform.position) >
-                   Time.deltaTime)
-            {
-                var step = speed * Time.deltaTime;
-                PlayerToPlace.transform.position = Vector3.MoveTowards(PlayerToPlace.transform.position,
-                    tile.transform.position, step);
-
-                yield return new WaitForSeconds(Time.deltaTime);
-            }
-
             SpicyHarissaLogger.Log(
                 $"PlacePlayerAnimated Loop ended  i [{i}] Tile[{tile.PositionInMap}] ]",
-                LogLevel.Verbose);
+                LogLevel.Verbose, SpicyHarissaLogger.MOVEMENT_DEBUG_KEY);
         }
 
         _lastSavedDirect = previousDirection;
@@ -650,6 +664,64 @@ public class GameManager : MonoBehaviour
         PlacePlayer(PlayerToPlace, TargetPosition);
     }
 
+    //previousDirection does NOT HAVE REF!!
+    private IEnumerator MovePlayer(Tile tile, Transform playerToPlace, float speed, Vector3 previousDirection,
+        float extraSpeedParamter = 1)
+    {
+        yield return PlayerRotate(playerToPlace.transform, tile.transform, previousDirection);
+
+        // _tileManager[i].PlacePlayer(PlayerToPlace.transform);
+        while (Vector3.Distance(playerToPlace.position, tile.transform.position) >
+               Time.deltaTime)
+        {
+            var step = speed * Time.deltaTime * extraSpeedParamter;
+            playerToPlace.position = Vector3.MoveTowards(playerToPlace.position,
+                tile.transform.position, step);
+
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+
+        if (tile.TitleType == TitleType.Start)
+        {
+            SpicyHarissaLogger.Log(
+                $"[{playerToPlace}] has crossed start ]",
+                LogLevel.Standard);
+            CurrentPlayerDidWholeLoop();
+        }
+    }
+
+    public IEnumerator PlacePlayerReverseAnimated(Player PlayerToPlace, int TargetPosition, int MovementsSteps,
+        float ExtraSpeedParamter = 1)
+    {
+        CurrentState = CurrentState.RollingDice;
+        int startingPosition = PlayerToPlace.CurrentPosition;
+        SpicyHarissaLogger.Log(
+            $"PlacePlayerAnimated  previousPosition [{startingPosition}] TargetPosition [{TargetPosition}]",
+            LogLevel.Verbose, SpicyHarissaLogger.MOVEMENT_DEBUG_KEY);
+
+        int currentPosition = startingPosition;
+        Vector3 previousDirection = _lastSavedDirect;
+        float speed = matchSettings.PlayerMovementSpeed;
+        for (int i = 1; i <= MovementsSteps; i++)
+        {
+            currentPosition = GetPreviousAvaliableTile(currentPosition, 1, _tileManager.TileCount);
+            Tile tile = _tileManager[currentPosition];
+
+            yield return MovePlayer(tile, PlayerToPlace.transform, speed, previousDirection, ExtraSpeedParamter);
+
+            previousDirection = PlayerToPlace.transform.position.GetDirection(tile.transform.position);
+
+            SpicyHarissaLogger.Log(
+                $"PlacePlayerAnimated Loop ended  i [{i}] Tile[{tile.PositionInMap}] ]",
+                LogLevel.Verbose, SpicyHarissaLogger.MOVEMENT_DEBUG_KEY);
+        }
+
+        _lastSavedDirect = previousDirection;
+        yield return new WaitForSeconds(Time.deltaTime);
+
+        PlacePlayer(PlayerToPlace, TargetPosition);
+        // currentPosition = GetPreviousAvaliableTile(currentPosition, 1, _tileManager.TileCount);
+    }
 
     private IEnumerator PlayerRotate(Transform playerTransform, Transform tileTransform, Vector3 previousDirection)
     {
@@ -657,33 +729,10 @@ public class GameManager : MonoBehaviour
         var heading = tileTransform.position - playerTransform.position;
         var distance = heading.magnitude;
         var direction = heading / distance; // This is now the normalized direction.
-        Debug.Log($"Angle {Angle}  direction = {direction} PreviousDirection = {previousDirection} ");
+        // Debug.Log($"Angle {Angle}  direction = {direction} PreviousDirection = {previousDirection} ");
 
-        // yield return null;
 
-        // if (direction == previousDirection  || previousDirection==Vector3.zero)
-        // {
         yield break;
-
-        // }
-        // Debug.Log($"Angle Are different starting rotation");
-        // float speed = matchSettings.PlayerMovementSpeed;
-        //
-        // var step = speed * Time.deltaTime;
-        // currentVelocity = 0;
-        // float currentAngle = step;
-        // playerTransform.transform.rotation=Quaternion.identity;
-        // while (playerTransform.eulerAngles.y > Angle)
-        // {
-        //      currentAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y , Angle ,ref currentVelocity ,step );
-        //     playerTransform.Rotate(Vector3.up,currentAngle );
-        //     // currentAngle += step;
-        //     // currentAngle=  Mathf.Clamp(currentAngle, 0, Angle);
-        //     yield return new WaitForSeconds(1);
-        //
-        // }
-
-        // yield return new WaitForSeconds(10);
     }
 
     public void PlacePlayer(Player PlayerToPlace, int position)
@@ -701,12 +750,29 @@ public class GameManager : MonoBehaviour
         int NextTile = GetNextAvaliableTitle(position, 1, _tileManager.TileCount);
         PlayerToPlace.transform.LookAt(_tileManager[NextTile].transform);
 
-        CurrentState = CurrentState.DiceRolled;
+        if (PlayerToPlace.CanRollAgain)
+        {
+            //Invoke His Turn again
+            OnNextPlayerTurn?.Invoke(CurrentPlayer);
+            CurrentState = CurrentState.Default;
+        }
+        else
+        {
+            CurrentState = CurrentState.DiceRolled;
+        }
     }
 
     #endregion
 
-    #region Utilily
+    #region Utilily/AI
+
+    public void SwitchAIState()
+    {
+        foreach (var player in _turnManager.ActivePlayers)
+        {
+            player.AIController.Active = !player.AIController.Active;
+        }
+    }
 
     public static int GetNextAvaliableTitle(int CurrentPosition, int DiceValue, int TotalLength)
     {

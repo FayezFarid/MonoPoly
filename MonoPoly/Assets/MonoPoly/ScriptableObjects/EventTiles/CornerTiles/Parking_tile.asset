@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Parking_tile
   m_EditorClassIdentifier: 
   landMaterial: {fileID: 2100000, guid: a2539f469d5dbd64b93691af9fde49fa, type: 2}
-  eventType: 5
-  eventDefinitions: []
+  eventType: 2
+  eventDefinitions:
+  - {fileID: 11400000, guid: d8363e5ba0dad7445bcc654bd950ad40, type: 2}

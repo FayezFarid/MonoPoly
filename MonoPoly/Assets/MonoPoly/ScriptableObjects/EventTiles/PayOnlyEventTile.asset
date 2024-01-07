@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: PayOnlyEventTile
   m_EditorClassIdentifier: 
   landMaterial: {fileID: 2100000, guid: 7592f4eafc35fb74ea1e312e8d43fe55, type: 2}
-  eventType: 4
+  eventType: 1
   eventDefinitions:
   - {fileID: 11400000, guid: 49ae92abbc2cf204982553447dc38bd6, type: 2}

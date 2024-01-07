@@ -22,6 +22,8 @@ public class ScreenMode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public const string MORTGAGING = "Mortgaging";
     public const string REDEEMING = "Redeeming";
     public const string SELLING = "Selling";
+    public const string DEACTIVATE_AI = "Deactivate Auto Play";
+    public const string ACTIVATE_AI = "Activate Auto Play";
 
     #region Internal struct
 
@@ -66,13 +68,14 @@ public class ScreenMode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     [SerializeField] private SmallPlayerInfoCard smallPlayerInfoCard_Prefab;
 
     [SerializeField] private EventDescriptionCard eventDescriptionCard;
+    [SerializeField] private TextMeshProUGUI switchAutoPlayButtonText;
 
     #endregion
 
     private GameManager _gameManager;
     private Dictionary<Player, SmallPlayerInfoCard> _activePlayerInfos = new Dictionary<Player, SmallPlayerInfoCard>();
 
-    private bool _firstPersonView=true;
+    private bool _firstPersonView = true;
 
 
     private void Start()
@@ -423,10 +426,10 @@ public class ScreenMode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     private void CreateMiniPlayerCard()
     {
-        if (_activePlayerInfos.Count < _gameManager.TurnManager.AllPlayers.Count() - 1)
+        if (_activePlayerInfos.Count < _gameManager.TurnManager.ActivePlayers.Count() - 1)
         {
             Player currentPlayer = _gameManager.TurnManager.CurrentPlayerTurn;
-            foreach (var player in _gameManager.TurnManager.AllPlayers)
+            foreach (var player in _gameManager.TurnManager.ActivePlayers)
             {
                 if (player != currentPlayer)
                 {
@@ -474,6 +477,19 @@ public class ScreenMode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         _gameManager.OpenTradeMenu(player);
         ChangeTradeCardsActivity(false);
         _tradeMenuOpen = false;
+    }
+
+    public void SwitchAIActive()
+    {
+        _gameManager.SwitchAIState();
+        if (_gameManager.CurrentPlayer.AIController.Active)
+        {
+            switchAutoPlayButtonText.text = DEACTIVATE_AI;
+        }
+        else
+        {
+            switchAutoPlayButtonText.text = ACTIVATE_AI;
+        }
     }
 
     #endregion

@@ -49,17 +49,21 @@ public static class ExtensionFillEventEffects
             List<Player> target = GetTargetPlayer(modifier.playerTarget, modifier.SecondaryPlayerTarget,
                 gameManager, out List<Player> secondaryTargetList);
 
-            foreach (var player in target)
-            {
-                GainMoney(player, modifier.value);
-            }
-
-            //TODO: should lose money accordingly
             if (secondaryTargetList != null)
             {
-                foreach (var player in secondaryTargetList)
+                foreach (var PlayerSecondary in secondaryTargetList)
                 {
-                    LoseMoney(player, modifier.value);
+                    foreach (var PlayerPrimary in target)
+                    {
+                        PlayerGivesMoneyTo(PlayerSecondary, PlayerPrimary, modifier.value);
+                    }
+                }
+            }
+            else
+            {
+                foreach (var player in target)
+                {
+                    GainMoney(player, modifier.value);
                 }
             }
         };
@@ -75,17 +79,22 @@ public static class ExtensionFillEventEffects
             List<Player> target = GetTargetPlayer(modifier.playerTarget, modifier.SecondaryPlayerTarget,
                 gameManager, out List<Player> secondaryTargetList);
 
-            foreach (var player in target)
-            {
-                LoseMoney(player, modifier.value);
-            }
-
             //TODO: should lose money accordingly
             if (secondaryTargetList != null)
             {
-                foreach (var player in secondaryTargetList)
+                foreach (var PlayerSecondary in secondaryTargetList)
                 {
-                    GainMoney(player, modifier.value);
+                    foreach (var PlayerPrimary in target)
+                    {
+                        PlayerGivesMoneyTo(PlayerPrimary, PlayerSecondary, modifier.value);
+                    }
+                }
+            }
+            else
+            {
+                foreach (var player in target)
+                {
+                    PlayerGivesMoneyTo(player, gameManager.TileManager.ParkingTileInstance, modifier.value);
                 }
             }
         };
@@ -164,6 +173,14 @@ public static class ExtensionFillEventEffects
         return listToReturn;
     }
 
+    // public static void PlayerGives
+    public static void PlayerGivesMoneyTo(IMoneyTrader player, IMoneyTrader playerToGiveMoneyTo, int value)
+    {
+        SpicyHarissaLogger.Log($"Static PayPlayer [{player}] Gain [{playerToGiveMoneyTo}] Value [{value}] ",
+            LogLevel.Verbose);
+        player.PayPlayer(playerToGiveMoneyTo, value);
+    }
+
     public static void LoseMoney(Player player, int value)
     {
         SpicyHarissaLogger.Log($"Static LoseMoney  [{player}] Value [{value}] ", LogLevel.Verbose);
@@ -179,6 +196,8 @@ public static class ExtensionFillEventEffects
     public static void PlacePlayer(Player player, int position, GameManager gameManager)
     {
         SpicyHarissaLogger.Log($"Static PlacePlayer  [{player}] Position [{position}] ", LogLevel.Verbose);
-        gameManager.PlacePlayer(player, position);
+        
+        gameManager.PlacePlayerCalcuated(player, position,false,2);
+        // gameManager.PlacePlayer(player, position);
     }
 }

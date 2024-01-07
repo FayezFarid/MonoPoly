@@ -16,7 +16,10 @@ public class TileEvent : Tile
             return;
         }
         _titleDefinition_Casted = (EventTileDefinition)titleDefinition;
-     
+        if (titleType == TitleType.Parking)
+        {
+            _tileInstance = new ParkingTileInstance();
+        }
         // _meshRenderer.material = _titleDefinition_Casted.LandMaterial;
      
     }
