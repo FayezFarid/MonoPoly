@@ -6,5 +6,5 @@ using UnityEngine;
 
 public abstract class EventEffectDefinition : ScriptableObject
 {
-    public abstract List<Action> GetActions(GameManager gameManager);
+    public abstract List<Action> GetActions(GameManager gameManager,Action onEnd);
 }

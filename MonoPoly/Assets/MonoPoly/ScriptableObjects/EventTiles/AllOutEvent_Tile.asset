@@ -15,4 +15,4 @@ MonoBehaviour:
   landMaterial: {fileID: 2100000, guid: c3cb0d5df6908814eb9971b105f2104c, type: 2}
   eventType: 1
   eventDefinitions:
-  - {fileID: 11400000, guid: 9bd565705cde8cc449d68ac84b807ff0, type: 2}
+  - {fileID: 11400000, guid: 853cd9b3fe6a3a14cb588a36b6fe48bc, type: 2}

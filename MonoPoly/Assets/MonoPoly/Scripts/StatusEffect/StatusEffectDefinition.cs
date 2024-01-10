@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using UnityEngine;
 
+//Basically GamePlayTags 
 public enum EffectType
 {
     Prison,
     PrisonPass,
     NoMoney,
+    ExtraMoney,
 }
 
 public interface IPlayerCallbacks
@@ -17,6 +19,7 @@ public interface IPlayerCallbacks
     void OnMoneyRemoved(ref int moneyValue);
     void OnPlayerTurnStarted();
     void OnPlayerTurnEnded();
+    void OnPayToPlayer(Player playerPaying, Player playerReceiving,ref int amount);
 }
 
 public interface IStatusEffectDefinition
@@ -52,7 +55,7 @@ public abstract class StatusEffectDefinition : ScriptableObject, IStatusEffectDe
     public abstract void OnPlayerTurnStarted(StatusEffectInstance instance);
 
     public abstract void OnEffectEnded(StatusEffectInstance instance);
-
+    public abstract void OnPayToPlayer(StatusEffectInstance instance,Player playerPaying, Player playerReceiving,ref int amount);
     public virtual void OnTurnPass(StatusEffectInstance instance)
     {
         instance.CurrentDuration--;
@@ -111,6 +114,11 @@ public class StatusEffectInstance : IPlayerCallbacks
     public void OnPlayerTurnEnded()
     {
         _statusEffectDefinition.OnTurnPass(this);
+    }
+
+    public void OnPayToPlayer(Player playerPaying, Player playerReceiving,ref int amount)
+    {
+       _statusEffectDefinition.OnPayToPlayer(this,playerPaying,playerReceiving,ref amount);
     }
 
     #endregion

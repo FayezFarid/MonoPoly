@@ -9,7 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 175666153f73dda49b0c7b1b07e36654, type: 3}
-  m_Name: EERS_RemoveNoMoney
+  m_Script: {fileID: 11500000, guid: 8d4b60e8c652dff42b19ff39ff9e0925, type: 3}
+  m_Name: EEGS_GiveExtraMoney
   m_EditorClassIdentifier: 
-  effectType: 2
+  _effectDefinitions:
+  - {fileID: 11400000, guid: 51614aae02756c545a75c6cf5d43753a, type: 2}

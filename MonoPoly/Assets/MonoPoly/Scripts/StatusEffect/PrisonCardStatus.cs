@@ -24,6 +24,11 @@ public class PrisonCardStatus : StatusEffectDefinition
     {
     }
 
+    public override void OnPayToPlayer(StatusEffectInstance instance, Player playerPaying, Player playerReceiving, ref int amount)
+    {
+        throw new System.NotImplementedException();
+    }
+
     public override void OnTurnPass(StatusEffectInstance instance)
     {
     }

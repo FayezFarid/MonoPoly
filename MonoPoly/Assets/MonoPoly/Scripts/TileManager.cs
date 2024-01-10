@@ -122,6 +122,33 @@ public class TileManager : MonoBehaviour
         return null;
     }
 
+    public LandTitleInstance GoToFirstLandFromPosition(int startingIndex)
+    {
+        LandTitleInstance landTitleInstance;
+        //search from starting point to the end
+        for (int i = startingIndex; i < TitleOrganized.Count; i++)
+        {
+            if (TitleOrganized[i].TitleType is TitleType.Land or TitleType.Station)
+            {
+                landTitleInstance = TitleOrganized[i].TileInstance as LandTitleInstance;
+
+                return landTitleInstance;
+            }
+        }
+
+        //go back to 0 and research
+        for (int i = 0; i < startingIndex; i++)
+        {
+            if (TitleOrganized[i].TitleType == TitleType.Land)
+            {
+                landTitleInstance = TitleOrganized[i].TileInstance as LandTitleInstance;
+                return landTitleInstance;
+            }
+        }
+
+        return null;
+    }
+
     public void PlayerLandedOnTile(Player player, int TilePosition)
     {
         //todo: whatever the fuck imma write imporve it

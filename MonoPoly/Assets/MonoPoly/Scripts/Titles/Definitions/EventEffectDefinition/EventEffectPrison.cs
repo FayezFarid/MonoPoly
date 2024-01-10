@@ -9,9 +9,11 @@ public class EventEffectPrison : EventEffectDefinition
 {
     [SerializeField] private PrisonStatusEffectDefinition prisonStatusEffectDefinition;
 
-    public override List<Action> GetActions(GameManager gameManager)
+    public override List<Action> GetActions(GameManager gameManager,Action onEnd)
     {
-        Action action = () => { gameManager.CurrentPlayerGoesPrison(prisonStatusEffectDefinition); };
+        Action action = () => { gameManager.CurrentPlayerGoesPrison(prisonStatusEffectDefinition);
+             onEnd();
+        };
         return new List<Action>() { action };
     }
 }

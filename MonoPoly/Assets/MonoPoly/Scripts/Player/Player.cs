@@ -191,6 +191,11 @@ public class Player : MonoBehaviour, IMoneyTrader
 
     public void PayPlayer(IMoneyTrader player, int amount)
     {
+        foreach (var VARIABLE in StatusEffects)
+        {
+            if(player is Player)
+            VARIABLE.OnPayToPlayer(this,player as Player,ref amount);
+        }
         //Don't reduce first maybe player can not gain money
         int NewAmount = player.IncreaseMoney(amount);
         ReduceMoney(NewAmount);

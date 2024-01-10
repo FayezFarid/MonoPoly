@@ -23,4 +23,9 @@ public class NoMoneyGainEffectDefinition : StatusEffectDefinition
     public override void OnEffectEnded(StatusEffectInstance instance)
     {
     }
+
+    public override void OnPayToPlayer(StatusEffectInstance instance, Player playerPaying, Player playerReceiving, ref int amount)
+    {
+        
+    }
 }

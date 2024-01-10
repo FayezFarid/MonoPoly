@@ -147,12 +147,16 @@ public class LandTitleInstance : TileInstance
         }
     }
 
-    public int CurrentRank => _currentRank.CurrentIndex;
-    public bool HasHouses => _currentRank.CurrentIndex > 0;
     public bool IsOwned => Owner != null;
-    public bool IsStation => LandDef.LandType == LandTypes.Station;
-    public virtual int GetRent => _landDef.Rent[_currentRank.CurrentIndex];
 
+    public int CurrentRank => _currentRank.CurrentIndex;
+    public virtual int GetRent => _landDef.Rent[_currentRank.CurrentIndex];
+    public bool HasHouses => _currentRank.CurrentIndex > 0;
+
+    public bool IsStation => LandDef.LandType == LandTypes.Station;
+
+    public int GetMaxRentRank => _landDef.Rent.Length;
+    public bool AtMaxRank => _currentRank.CurrentIndex == _landDef.Rent.Length - 1;
 
     public LandTitleInstance(TileDefinition landdef, TileLand tileLand)
     {
@@ -165,7 +169,7 @@ public class LandTitleInstance : TileInstance
     public override void UpgradeLand()
     {
         //todo: iNDEX STRUCT
-        if (_currentRank.CurrentIndex == _landDef.Rent.Length - 1)
+        if (AtMaxRank)
         {
             SpicyHarissaLogger.Log($" Land [{_landDef.LandName}] at Max ", LogLevel.Standard);
             return;

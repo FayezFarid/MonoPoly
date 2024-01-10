@@ -155,9 +155,28 @@ public class GameDebugger : MonoBehaviour
 
         _newButtonPosition.y += StandardButtonSize.y;
         buttonRect.position = _newButtonPosition;
+        if (GUI.Button(buttonRect, "Give current Player all lands", style))
+        {
+            GivePlayerAllLand();
+        }
+
+        _newButtonPosition.y += StandardButtonSize.y;
+        buttonRect.position = _newButtonPosition;
         if (GUI.Button(buttonRect, "Hide ", style))
         {
             HideGUI = true;
+        }
+    }
+
+    private void GivePlayerAllLand()
+    {
+        Player currentPlayer = GameManager.CurrentPlayer;
+        foreach (var KeyPairedValue in GameManager.TileManager.LandInstancePairedLandType)
+        {
+            foreach (var land in KeyPairedValue.Value)
+            {
+                currentPlayer.GainLand(land);
+            }
         }
     }
 

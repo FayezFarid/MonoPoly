@@ -16,3 +16,4 @@ MonoBehaviour:
   EffectModifiers:
   - {fileID: 11400000, guid: dcb572e146da257489f1aadc94340126, type: 2}
   - {fileID: 11400000, guid: 7aea8b1e95449834bb937290aa826938, type: 2}
+  - {fileID: 11400000, guid: b7bb247a872e67749ab6de794b306c26, type: 2}

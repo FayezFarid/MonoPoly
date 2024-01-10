@@ -9,9 +9,19 @@ public class EventEffectTelportRelative : EventEffectDefinition
     [SerializeField] private bool forward;
     [SerializeField] private int stepsToTake;
 
-    public override List<Action> GetActions(GameManager gameManager)
+    public override List<Action> GetActions(GameManager gameManager, Action onEnd)
     {
-        Action action = forward ? () => { MoveForward(gameManager); } : () => { MoveBackward(gameManager); };
+        Action action = forward
+            ? () =>
+            {
+                MoveForward(gameManager);
+                onEnd.Invoke();
+            }
+            : () =>
+            {
+                MoveBackward(gameManager);
+                onEnd.Invoke();
+            };
         return new List<Action>() { action };
     }
 

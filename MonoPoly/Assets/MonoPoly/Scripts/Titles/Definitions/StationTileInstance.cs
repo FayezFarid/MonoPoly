@@ -8,6 +8,8 @@ public class StationTileInstance : LandTitleInstance
         get
         {
             int ownedStationCount = Owner.OwnedStations;
+            if (ownedStationCount == 0)
+                return LandDef.Rent[0];
             return LandDef.Rent[ownedStationCount - 1];
         }
     }

@@ -8,9 +8,10 @@ public class EventEffectRemoveStatus : EventEffectDefinition
 {
     [SerializeField] private EffectType effectType;
 
-    public override List<Action> GetActions(GameManager gameManager)
+    public override List<Action> GetActions(GameManager gameManager,Action onEnd)
     {
-        Action action = () => { gameManager.CurrentPlayer.RemoveEffectByType(effectType); };
+        
+        Action action = () => { gameManager.CurrentPlayer.RemoveEffectByType(effectType); onEnd(); };
         return new List<Action>() { action };
     }
 }

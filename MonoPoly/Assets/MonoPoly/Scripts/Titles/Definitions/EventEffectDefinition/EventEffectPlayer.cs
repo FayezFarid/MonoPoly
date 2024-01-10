@@ -9,8 +9,8 @@ public  class EventEffectPlayer : EventEffectDefinition
 {
     [SerializeField] public List<RandomEffectModifier> EffectModifiers;
 
-    public override List<Action> GetActions(GameManager gameManager)
+    public override List<Action> GetActions(GameManager gameManager,Action onEnd)
     {
-        return ExtensionFillEventEffects.FillAction(this, gameManager);
+        return ExtensionFillEventEffects.FillAction(this, gameManager,onEnd);
     }
 }

@@ -18,29 +18,29 @@ public class AttributeMonopolyEvent : Attribute
 
 public static class ExtensionFillEventEffects
 {
-    public static List<Action> FillAction(EventEffectPlayer eventDefinition, GameManager gameManager)
+    public static List<Action> FillAction(EventEffectPlayer eventDefinition, GameManager gameManager, Action onEnd)
     {
         List<Action> actions = new List<Action>();
         foreach (var modifier in eventDefinition.EffectModifiers)
         {
             if (modifier.modifierType == ModifierType.PlayerPosition)
             {
-                actions.Add(CreateActionPlayerPosition(modifier, gameManager));
+                actions.Add(CreateActionPlayerPosition(modifier, gameManager, onEnd));
             }
             else if (modifier.modifierType == ModifierType.Pay)
             {
-                actions.Add(CreateActionPay(modifier, gameManager));
+                actions.Add(CreateActionPay(modifier, gameManager, onEnd));
             }
             else if (modifier.modifierType == ModifierType.Gain)
             {
-                actions.Add(CreateActionGain(modifier, gameManager));
+                actions.Add(CreateActionGain(modifier, gameManager, onEnd));
             }
         }
 
         return actions;
     }
 
-    private static Action CreateActionGain(RandomEffectModifier modifier, GameManager gameManager)
+    private static Action CreateActionGain(RandomEffectModifier modifier, GameManager gameManager, Action onEnd)
     {
         Action action = null;
 
@@ -66,11 +66,13 @@ public static class ExtensionFillEventEffects
                     GainMoney(player, modifier.value);
                 }
             }
+
+            onEnd();
         };
         return action;
     }
 
-    private static Action CreateActionPay(RandomEffectModifier modifier, GameManager gameManager)
+    private static Action CreateActionPay(RandomEffectModifier modifier, GameManager gameManager, Action onEnd)
     {
         Action action = null;
 
@@ -97,11 +99,14 @@ public static class ExtensionFillEventEffects
                     PlayerGivesMoneyTo(player, gameManager.TileManager.ParkingTileInstance, modifier.value);
                 }
             }
+
+            onEnd();
         };
         return action;
     }
 
-    private static Action CreateActionPlayerPosition(RandomEffectModifier modifier, GameManager gameManager)
+    public static Action CreateActionPlayerPosition(RandomEffectModifier modifier, GameManager gameManager,
+        Action onEnd)
     {
         Action action = null;
 
@@ -110,6 +115,10 @@ public static class ExtensionFillEventEffects
             List<Player> target = GetTargetPlayer(modifier.playerTarget, modifier.SecondaryPlayerTarget,
                 gameManager, out List<Player> secondaryTargetList);
 
+            _gameManager = gameManager;
+            _onEnd = onEnd;
+
+            gameManager.OnPlayerLandedOnTile += OnPlayerLanded;
             foreach (var player in target)
             {
                 PlacePlayer(player, modifier.value, gameManager);
@@ -118,6 +127,15 @@ public static class ExtensionFillEventEffects
         return action;
     }
 
+    private static GameManager _gameManager;
+    private static Action _onEnd;
+
+    private static void OnPlayerLanded(Player player, Tile tile)
+    {
+        SpicyHarissaLogger.Log($"Player Landed going trigger on End ",LogLevel.Verbose);
+        _onEnd();
+        _gameManager.OnPlayerLandedOnTile -= OnPlayerLanded;
+    }
 
     private static List<Player> GetSingleTarget(PlayerTarget playerTarget, GameManager gameManager)
     {
@@ -196,8 +214,8 @@ public static class ExtensionFillEventEffects
     public static void PlacePlayer(Player player, int position, GameManager gameManager)
     {
         SpicyHarissaLogger.Log($"Static PlacePlayer  [{player}] Position [{position}] ", LogLevel.Verbose);
-        
-        gameManager.PlacePlayerCalcuated(player, position,false,2);
+
+        gameManager.PlacePlayerCalcuated(player, position, false, 2);
         // gameManager.PlacePlayer(player, position);
     }
 }

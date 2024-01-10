@@ -82,6 +82,8 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
+    #region State variables
+
     private CurrentState _currentState;
 
     public CurrentState CurrentState
@@ -98,6 +100,11 @@ public class GameManager : MonoBehaviour
     private List<TileLand> _cachedUpgradableTiles;
     private List<TileLand> _cachedSellableLands;
     [SerializeField] private Vector3 _lastSavedDirect;
+
+    private bool _eventFinished;
+
+    #endregion
+
 
     private void Start()
     {
@@ -464,8 +471,10 @@ public class GameManager : MonoBehaviour
     {
         SpicyHarissaLogger.Log($"Going To Prison", LogLevel.Verbose);
         //TODO: ADD revere movement
-        StartCoroutine(PlacePlayerReverseAnimated(CurrentPlayer, TileManager.PrisonTile,
-            TileManager.GoPrisonTile - TileManager.PrisonTile, 2));
+
+        PlacePlayerCalcuated(CurrentPlayer, TileManager.PrisonTile, true, 2f);
+        // StartCoroutine(PlacePlayerReverseAnimated(CurrentPlayer, TileManager.PrisonTile,
+        // TileManager.GoPrisonTile - TileManager.PrisonTile, 2));
         CurrentPlayer.ApplyEffectToSelf(effectDefinition);
     }
 
@@ -526,16 +535,24 @@ public class GameManager : MonoBehaviour
         ScreenMode.InitEventDescription(eventDefinition.Description);
         yield return new WaitForSeconds(MatchSettings.SingletonInstance.DelayToCloseEventDescription);
         ScreenMode.CloseEventDescription();
-        List<Action> actions = eventDefinition.GetActions(this);
+        List<Action> actions = eventDefinition.GetActions(this,EventFinished);
         if (actions.Count == 0)
         {
             SpicyHarissaLogger.LogError($"Event Definiton name [{eventDefinition.name} Actions are empty]");
         }
 
+        WaitUntil waitUntilEventDone = new WaitUntil(() => _eventFinished);
         foreach (var item in actions)
         {
+            _eventFinished = false;
             item.Invoke();
+            yield return waitUntilEventDone;
         }
+    }
+
+    public void EventFinished()
+    {
+        _eventFinished = true;
     }
 
     public void PlayerLandedOnStation(Player player, LandTitleInstance station)
@@ -595,6 +612,7 @@ public class GameManager : MonoBehaviour
         CurrentState = CurrentState.RollingDice;
         _diceManager.RollDice();
     }
+
     private void OnDiceRolled(int totalValue, bool ValuesAreEual)
     {
         SpicyHarissaLogger.Log($"Dice Value [{totalValue}] ", LogLevel.Standard);
@@ -610,7 +628,6 @@ public class GameManager : MonoBehaviour
         StartCoroutine(PlacePlayerAnimated(_turnManager.CurrentPlayerTurn, PositionToPlace, totalValue));
     }
 
- 
 
     public void PlacePlayerCalcuated(Player player, int TargetPosition, bool inReverse, float ExtraSpeedParamter = 1)
     {

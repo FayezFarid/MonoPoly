@@ -38,12 +38,12 @@ public class EventDefinition : ScriptableObject
     public string Description;
     [SerializeField] protected List<EventEffectDefinition> EffectModifiers;
 
-    public virtual List<Action> GetActions(GameManager gameManager)
+    public virtual List<Action> GetActions(GameManager gameManager, Action onEnd)
     {
         List<Action> returnList = new List<Action>();
         foreach (var VARIABLE in EffectModifiers)
         {
-            List<Action> actions = VARIABLE.GetActions(gameManager);
+            List<Action> actions = VARIABLE.GetActions(gameManager, onEnd);
             if (actions != null)
                 returnList.AddRange(actions);
         }

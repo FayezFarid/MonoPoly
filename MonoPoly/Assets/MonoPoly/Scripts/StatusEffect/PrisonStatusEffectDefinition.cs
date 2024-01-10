@@ -30,4 +30,9 @@ public class PrisonStatusEffectDefinition : StatusEffectDefinition
     {
         CurrentPlayerLeftPrison?.Invoke(instance);
     }
+
+    public override void OnPayToPlayer(StatusEffectInstance instance, Player playerPaying, Player playerReceiving, ref int amount)
+    {
+        
+    }
 }

@@ -9,7 +9,7 @@ public class EventEffectGiveLand : EventEffectDefinition
     [SerializeField] private int preciseLandToGive;
     [SerializeField] private bool searchFromCurrentPosition;
 
-    public override List<Action> GetActions(GameManager gameManager)
+    public override List<Action> GetActions(GameManager gameManager,Action onEnd)
     {
         LandTitleInstance landTitleInstance;
         if (preciseLandToGive == 0)
@@ -41,7 +41,9 @@ public class EventEffectGiveLand : EventEffectDefinition
             return null;
         }
 
-        Action action = () => { GiveLand(gameManager, landTitleInstance); };
+        Action action = () => { GiveLand(gameManager, landTitleInstance);
+            onEnd();
+        };
 
         return new List<Action>() { action };
     }

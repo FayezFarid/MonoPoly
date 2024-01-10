@@ -8,7 +8,7 @@ public class EventEffectGiveStatus : EventEffectDefinition
 {
     [SerializeField] private List<StatusEffectDefinition> _effectDefinitions;
     
-    public override List<Action> GetActions(GameManager gameManager)
+    public override List<Action> GetActions(GameManager gameManager,Action onEnd)
     {
         Action action = (() =>
         {
@@ -16,6 +16,8 @@ public class EventEffectGiveStatus : EventEffectDefinition
             {
                 gameManager.CurrentPlayer.ApplyEffectToSelf(VARIABLE);
             }
+
+            onEnd();
         });
         return new List<Action>() { action };
     }
