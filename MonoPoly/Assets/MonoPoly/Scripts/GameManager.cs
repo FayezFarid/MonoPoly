@@ -199,10 +199,11 @@ public class GameManager : MonoBehaviour
     private void InitPlayers()
     {
         allPlayers = new List<Player>();
-        for (int i = 0; i < matchSettings.PlayersNumber; i++)
+   
+        for (int i = 0; i < matchSettings.RunTimePlayerDatas.Count; i++)
         {
             Player player = CreatePlayer();
-            player.PlayerName = $"Player {i}";
+            player.PlayerName = matchSettings.RunTimePlayerDatas[i].Name;
             player.IncreaseMoney(matchSettings.InitalMoney);
             player.PlayerColor = matchSettings.PlayerPossibleColors[i];
             allPlayers.Add(player);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -66,19 +67,31 @@ public class MatchSettings : ScriptableObject
     [SerializeField] private int wholeLoopMoney = 200;
     [SerializeField] private int prisonFee;
 
-
-    [SerializeField] private int playersNumber;
     [SerializeField] private int numberOfDices = 2;
     [SerializeField] private float diceRollTime;
 
 
-    public int WholeLoopMoney => wholeLoopMoney;
-    public int PrisonFee => prisonFee;
-    public float DiceRollTime => diceRollTime;
-    public int InitalMoney => initalMoney;
-    public int PlayersNumber => playersNumber;
+    public int WholeLoopMoney
+    {
+        get => wholeLoopMoney;
+        set => wholeLoopMoney = value;
+    }
+
+    public int PrisonFee
+    {
+        get => prisonFee;
+        set => prisonFee = value;
+    }
+
+    public int InitalMoney
+    {
+        get => initalMoney;
+        set => initalMoney = value;
+    }
+
     public float PlayerMovementSpeed;
     [Range(0, 1)] public float BidIncreasePercentage;
+    public float DiceRollTime => diceRollTime;
     public int NumberOfDices => numberOfDices;
 
 
@@ -88,4 +101,16 @@ public class MatchSettings : ScriptableObject
 
     public bool UseAppropriateColors;
     [Header("AI")] public float DelayBetweenAction;
+
+    #region RunTime
+
+    [Serializable]
+    public struct RunTimePlayerData
+    {
+        public string Name;
+    }
+
+    public List<RunTimePlayerData> RunTimePlayerDatas = new List<RunTimePlayerData>();
+
+    #endregion
 }

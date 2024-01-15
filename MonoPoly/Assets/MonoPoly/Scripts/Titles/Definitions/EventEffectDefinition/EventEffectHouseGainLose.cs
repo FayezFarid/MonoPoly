@@ -25,14 +25,34 @@ public class EventEffectHouseGainLose : EventEffectDefinition
     private void UpgradePlayerLand(GameManager gameManager)
     {
         List<TileLand> tileLands = gameManager.GetPlayerOwnedLandInstanceSet(gameManager.CurrentPlayer);
-        for (int i = 0; i < numberOfHousesValue; i++)
+        if (RemoveHouses)
         {
-            int RandomIndex = Random.Range(0, tileLands.Count);
+            List<TileLand> TilesWithHouses = new List<TileLand>();
+            foreach (var land in tileLands)
+            {
+                if (land.LandTitleInstance.HasHouses)
+                {
+                    TilesWithHouses.Add(land);
+                }
+            }
 
-            if (!RemoveHouses)
+            if (TilesWithHouses.Count == 0)
+                return;
+            for (int i = 0; i < numberOfHousesValue; i++)
+            {
+                int RandomIndex = Random.Range(0, TilesWithHouses.Count);
+            
+                TilesWithHouses[RandomIndex].LandTitleInstance.DownGradeLand();
+            }
+        }
+        else
+        {
+            for (int i = 0; i < numberOfHousesValue; i++)
+            {
+                int RandomIndex = Random.Range(0, tileLands.Count);
+
                 tileLands[RandomIndex].LandTitleInstance.UpgradeLand();
-            else
-                tileLands[RandomIndex].LandTitleInstance.DownGradeLand();
+            }
         }
     }
 }

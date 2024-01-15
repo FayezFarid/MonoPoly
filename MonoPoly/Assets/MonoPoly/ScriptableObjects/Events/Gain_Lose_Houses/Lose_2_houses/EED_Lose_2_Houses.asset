@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37a4902b67dbd134a9ebadb309930de7, type: 3}
   m_Name: EED_Lose_2_Houses
   m_EditorClassIdentifier: 
-  Description: Gain 2 houses
+  Description: Lose 2 houses
   EffectModifiers:
-  - {fileID: 11400000, guid: 5e5eba9c08aceb9478f531b22991da18, type: 2}
+  - {fileID: 11400000, guid: 1ee121b88dbb56445a802356da6c6968, type: 2}
