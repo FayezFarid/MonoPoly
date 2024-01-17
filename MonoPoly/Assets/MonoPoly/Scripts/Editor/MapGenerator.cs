@@ -8,10 +8,39 @@ using Object = UnityEngine.Object;
 
 public class MapGenerator : EditorWindow
 {
+    public static Vector3[] SpriteRenderPositions = new Vector3[4]
+        { Vector3.zero, new Vector3(0.75f, 0, 0), new Vector3(-0.75F, 0, 0), new Vector3(0, 0, -0.75f) };
+
+    public static Vector3[] HouseRenderPositions = new Vector3[4]
+        { Vector3.zero, new Vector3(0.25f, 0, 0), new Vector3(-0.25f, 0, 0), new Vector3(0, 0, -0.25f) };
+
+    public static int[] HouseRenderAngles = new int[4] { 0, 90, 270, 180 };
+
+
+    public GameObject EventTilePrefab;
+    public GameObject LandPreFabTile;
+    public GameObject StationPreFabTile;
+
+    public GameObject Parent;
+
+    public Vector3 TileSize = new Vector3(4, 0.1f, 4);
+    public Vector3 TileSizeHorz = new Vector3(5, 0.1f, 7);
+    public Vector3 CornerTileSize;
+
+    public Vector3 startingPosition = Vector3.zero;
+
+    public Lane Lanes;
+
+    public int Length;
+
+    public int StartingIndex = 0;
+
+    public int LanePosition = 0;
+
     [MenuItem("SpicyHarissa/BoardGenerator")]
     public static void ShowWindow()
     {
-        EditorWindow.GetWindow(typeof(MapGenerator));
+        GetWindow(typeof(MapGenerator));
     }
 
     void OnGUI()
@@ -24,11 +53,16 @@ public class MapGenerator : EditorWindow
             (GameObject)EditorGUILayout.ObjectField("LandPreFabTile", LandPreFabTile, typeof(GameObject), true);
         StationPreFabTile =
             (GameObject)EditorGUILayout.ObjectField("StationPreFabTile", StationPreFabTile, typeof(GameObject), true);
+        EditorGUILayout.Space();
         Parent = (GameObject)EditorGUILayout.ObjectField("Tiles parent", Parent, typeof(GameObject), true);
 
         startingPosition = EditorGUILayout.Vector3Field("Starting Position", startingPosition);
+
+        EditorGUILayout.Space();
+
         TileSize = EditorGUILayout.Vector3Field("Tile Size", TileSize);
         TileSizeHorz = EditorGUILayout.Vector3Field("Tile Size horztional", TileSizeHorz);
+        CornerTileSize = EditorGUILayout.Vector3Field("Corner tile size", CornerTileSize);
 
         Lanes = (Lane)EditorGUILayout.ObjectField("Lane", Lanes, typeof(Lane), true);
 
@@ -44,231 +78,105 @@ public class MapGenerator : EditorWindow
 
         if (GUILayout.Button("Create Board"))
         {
-            CreateBoard();
+            CreateBoardNew();
         }
     }
 
-    public GameObject EventTilePrefab;
-    public GameObject LandPreFabTile;
-    public GameObject StationPreFabTile;
-
-    public GameObject Parent;
-
-    public Vector3 TileSize = new Vector3(4, 0.1f, 4);
-    public Vector3 TileSizeHorz = new Vector3(5, 0.1f, 7);
-
-    public Vector3 startingPosition = Vector3.zero;
-
-    public Lane Lanes;
-
-    public int Length;
-
-    public int StartingIndex = 0;
-
-    public int LanePosition = 0;
 
     public void CreateLane()
     {
-        if (LanePosition == 0)
-        {
-            CreateLaneBottom(startingPosition, Parent, StartingIndex);
-            return;
-        }
-        else if (LanePosition == 1)
-        {
-            CreateLaneMiddleLeft(startingPosition, Parent, StartingIndex);
-        }
-        else if (LanePosition == 2)
-        {
-            CreateLaneTop(startingPosition, Parent, StartingIndex);
-        }
-        else if (LanePosition == 3)
-        {
-            CreateLaneMiddleRight(startingPosition, Parent, StartingIndex);
-        }
+        // CreateALane(ref startingPosition, LanePosition, Parent, StartingIndex);
     }
 
-    public void CreateBoard()
+    public void CreateBoardNew()
     {
         Vector3 position = startingPosition;
         int startingIndex = 0;
 
         GameObject firstLaneParent = new GameObject("First Lane");
         firstLaneParent.transform.position = new Vector3(0, 0.1f, 0);
-        position = CreateLaneBottom(position, firstLaneParent, startingIndex);
+        CreateALane(ref position, 0, firstLaneParent, startingIndex);
         Debug.Log($"First position = {position}");
 
+        //IDk why but this seems to work
+        position.z +=  TileSizeHorz.z - 0.5f;
+        position.x += CornerTileSize.x;
+        
         startingIndex += 10;
         GameObject secondLaneParent = new GameObject("Second Lane");
         secondLaneParent.transform.position = new Vector3(0, 0.1f, 0);
         ;
-        position = CreateLaneMiddleLeft(position, secondLaneParent, startingIndex);
+        CreateALane(ref position, 1, secondLaneParent, startingIndex);
 
-        position.z -= TileSize.z;
-        position.x += TileSize.x;
+        position.z -= CornerTileSize.z;
+        position.x += CornerTileSize.x - 0.5f;
 
         Debug.Log($"Second position = {position}");
 
         startingIndex += 10;
         GameObject thirdLaneParent = new GameObject("Third Lane");
         thirdLaneParent.transform.position = new Vector3(0, 0.1f, 0);
-        position = CreateLaneTop(position, thirdLaneParent, startingIndex);
+        CreateALane(ref position, 2, thirdLaneParent, startingIndex);
 
-        position.z -= TileSize.z;
-        position.x -= TileSize.x;
+        position.z -= CornerTileSize.z-0.5f;
+        position.x -= CornerTileSize.x;
         Debug.Log($"Third position = {position}");
 
         startingIndex += 10;
         GameObject fourthLaneParent = new GameObject("Fourth Lane");
         fourthLaneParent.transform.position = new Vector3(0, 0.1f, 0);
-        position = CreateLaneMiddleRight(position, fourthLaneParent, startingIndex);
+        CreateALane(ref position, 3, fourthLaneParent, startingIndex);
         Debug.Log($"Fourth position = {position}");
     }
 
-    private GameObject GetCorrespendingObject(TileDefinition tileDefinition)
+
+    private bool IsHorzIndex(int index) => index is 1 or 3;
+
+    private int GetSign(int index)
     {
-        if (tileDefinition is EventTileDefinition)
-        {
-            return EventTilePrefab;
-        }
-
-        if (tileDefinition is LandTileDefinition)
-        {
-            return LandPreFabTile;
-        }
-
-        if (tileDefinition is StationTileDefinition)
-        {
-            return StationPreFabTile;
-        }
-
-        return null;
+        if (index is 0 or 3)
+            return -1;
+        return 1;
     }
 
-    public Vector3 CreateLaneMiddleLeft(Vector3 StartingPosition, GameObject parent, int AdditonalIndex)
+    public void CreateALane(ref Vector3 StartingPosition, int laneIndex, GameObject parent, int additonalIndex)
     {
-        Vector3 position = StartingPosition;
+        Lanes.OnAfterDeserialize();
+
         for (int i = 0; i < 10; i++)
         {
-            TileDefinition tileDefinition = Lanes.Definitions_secondLane[i];
+            TileDefinition tileDefinition = Lanes.LanesDefinitions[laneIndex][i];
             Object obj = PrefabUtility.InstantiatePrefab(GetCorrespendingObject(tileDefinition));
-            ;
             GameObject TileGO = (GameObject)obj;
 
+            float valueToAdd = i == 9 ? CornerTileSize.x : TileSizeHorz.x;
+            valueToAdd *= GetSign(laneIndex);
+            Vector3 tileSize = i == 9 ? CornerTileSize : TileSizeHorz;
 
-            // TileGO.transform.position = position;
-            // TileGO.transform.localScale = TileSize;
-            // position.z += TileSize.z;
-            // TileGO.transform.SetParent(parent.transform);
+            SetGameObjectStandard(TileGO, parent.transform, ref StartingPosition, valueToAdd, !IsHorzIndex(laneIndex),
+                tileSize);
 
-            SetGameObjectStandard(TileGO, parent.transform, ref position, TileSize.z, false,TileSizeHorz);
-
+            if (i != 9 && IsHorzIndex(laneIndex))
+                TileGO.transform.Rotate(Vector3.up, 90);
             Tile tile = TileGO.GetComponent<Tile>();
-            SetupInformation(tile, tileDefinition, i + AdditonalIndex);
 
-            if (tile.TitleType == TitleType.Land)
-            {
-                SetSpriteRender(TileGO, new Vector3(0.75f, 0, 0));
-                TileLand tileLand = (TileLand)tile;
-                SetHouse(tileLand, new Vector3(0.25f, 0, 0),90);
-            }
-
+            SetupInformation(tile, tileDefinition, i + additonalIndex);
             SetTileType(tile, tileDefinition);
-        }
-
-        return position;
-    }
-
-    public Vector3 CreateLaneMiddleRight(Vector3 StartingPosition, GameObject parent, int AdditonalIndex)
-    {
-        Vector3 position = StartingPosition;
-        for (int i = 0; i < 10; i++)
-            // for (int i = 9; i >= 0; i--)
-        {
-            TileDefinition tileDefinition = Lanes.Definitions_fourthLane[i];
-            Object obj = PrefabUtility.InstantiatePrefab(GetCorrespendingObject(tileDefinition));
-            ;
-            GameObject TileGO = (GameObject)obj;
-
-
-            SetGameObjectStandard(TileGO, parent.transform, ref position, -TileSize.z, false,TileSizeHorz);
-
-            Tile tile = TileGO.GetComponent<Tile>();
-            SetupInformation(tile, tileDefinition, i + AdditonalIndex);
-
-            if (tile.TitleType == TitleType.Land)
-            {
-                SetSpriteRender(TileGO, new Vector3(-0.75F, 0, 0));
-                TileLand tileLand = (TileLand)tile;
-                SetHouse(tileLand, new Vector3(-0.25f, 0, 0),270);
-            }
-
-            SetTileType(tile, tileDefinition);
-        }
-
-        return position;
-    }
-
-
-    public Vector3 CreateLaneTop(Vector3 StartingPosition, GameObject parent, int AdditonalIndex)
-    {
-        Vector3 position = StartingPosition;
-        for (int i = 0; i < 10; i++)
-        {
-            TileDefinition definition = Lanes.Definitions_thirdLane[i];
-            Object obj = PrefabUtility.InstantiatePrefab(GetCorrespendingObject(definition));
-            ;
-            GameObject TileGO = (GameObject)obj;
-
-
-            SetGameObjectStandard(TileGO, parent.transform, ref position, TileSize.x, true,TileSize);
-
-            Tile tile = TileGO.GetComponent<Tile>();
-            SetupInformation(tile, definition, i + AdditonalIndex);
-
-            if (tile.TitleType == TitleType.Land)
-            {
-                SetSpriteRender(TileGO, new Vector3(0, 0, -0.75f));
-
-                TileLand tileLand = (TileLand)tile;
-                SetHouse(tileLand, new Vector3(0, 0, -0.25f),180);
-            }
-
-            SetTileType(tile, definition);
-        }
-
-        return position;
-    }
-
-    public Vector3 CreateLaneBottom(Vector3 StartingPosition, GameObject parent, int AdditonalIndex)
-    {
-        Vector3 position = StartingPosition;
-        for (int i = 9; i >= 0; i--)
-        {
-            TileDefinition tileDefinition = Lanes.Definitions_firstLane[i];
-
-            Object obj = PrefabUtility.InstantiatePrefab(GetCorrespendingObject(tileDefinition));
-            ;
-            GameObject TileGO = (GameObject)obj;
-
-
-            SetGameObjectStandard(TileGO, parent.transform, ref position, TileSize.x, true,TileSize);
-
-            Tile tile = TileGO.GetComponent<Tile>();
-            SetupInformation(tile, tileDefinition, i + AdditonalIndex);
 
             if (tile.TitleType == TitleType.Land)
             {
                 TileLand tileLand = (TileLand)tile;
-                SetHouse(tileLand, default,0);
+                LandSpriteAndHouses(TileGO, tileLand, laneIndex);
             }
-            SetTileType(tile, tileDefinition);
         }
-
-        position = StartingPosition;
-        position.z = TileSize.z;
-        return position;
     }
+
+    private void LandSpriteAndHouses(GameObject tileGO, TileLand tileLand, int laneIndex)
+    {
+        SetSpriteRender(tileGO, SpriteRenderPositions[laneIndex]);
+        SetHouse(tileLand, HouseRenderPositions[laneIndex], HouseRenderAngles[laneIndex]);
+    }
+
 
     private void SetGameObjectStandard(GameObject TileGO, Transform parent, ref Vector3 position, float valueToAdd,
         bool AddToX /*If NotX It's Z*/, Vector3 tileSize)
@@ -276,7 +184,7 @@ public class MapGenerator : EditorWindow
         TileGO.transform.position = position;
         // if (AddToX)
         // {
-            
+
         TileGO.transform.localScale = tileSize;
         // }
         // else
@@ -285,9 +193,14 @@ public class MapGenerator : EditorWindow
         // }
 
         if (AddToX)
+        {
             position.x += valueToAdd;
+        }
         else
+        {
+            // TileGO.transform.Rotate(Vector3.up,90);
             position.z += valueToAdd;
+        }
 
         TileGO.transform.SetParent(parent);
     }
@@ -338,16 +251,36 @@ public class MapGenerator : EditorWindow
     private void SetHouse(TileLand tileLand, Vector3 Pos, float RotationAngle)
     {
         Transform transform = tileLand.HouseMesh.transform;
-        
+
         if (Pos != Vector3.zero)
             transform.localPosition = Pos;
         if (RotationAngle != 0)
             transform.Rotate(new Vector3(0, 1, 0), RotationAngle);
-        
-        
+
+
         Vector3 localPos = transform.localScale;
         localPos.y = 3;
         transform.localScale = localPos;
+    }
+
+    private GameObject GetCorrespendingObject(TileDefinition tileDefinition)
+    {
+        if (tileDefinition is EventTileDefinition)
+        {
+            return EventTilePrefab;
+        }
+
+        if (tileDefinition is LandTileDefinition)
+        {
+            return LandPreFabTile;
+        }
+
+        if (tileDefinition is StationTileDefinition)
+        {
+            return StationPreFabTile;
+        }
+
+        return null;
     }
 }
 
