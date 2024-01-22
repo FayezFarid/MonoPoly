@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Random = UnityEngine.Random;
@@ -48,6 +49,17 @@ public class GameDebugger : MonoBehaviour
     private Vector2 _newButtonPosition;
 
     [SerializeField] private Transform diceRigibody;
+
+
+    public float firstLineDis;
+    public float secondLineDis;
+    public float thirdLineDis;
+    public float fourthLineDis;
+
+    public float firstLineAngle;
+    public float secondLineAngle;
+    public float thirdLineAngle;
+    public float fourthLineAngle;
 
 
     public void OnGUI()
@@ -196,100 +208,38 @@ public class GameDebugger : MonoBehaviour
     private Vector3 lastPos;
     private Vector3 initPos;
 
-    private void RollDice()
-    {
-        // int x = Random.Range(50,1000);
-        // int y = 0; /*Random.Range(0, 100);*/
-        // int z = Random.Range(50, 1000);
-        // diceRigibody.AddTorque((new Vector3(x, y, z)),ForceMode.Acceleration);
-        // lastPos.y += 12;
-        // diceRigibody.AddForce (new Vector3(x, y, z) * diceRigibody.mass,ForceMode.Acceleration);
-        StartCoroutine(rollDiceCorotuine(ExpectedNumber));
-    }
-
-    private IEnumerator rollDiceCorotuine(int expectedValue)
-    {
-        float CurrentTime = 0;
-        float Angle = 180;
-        while (CurrentTime < 3)
-        {
-            // diceRigibody.AddTorque(new Vector3(110,10,10),ForceMode.Force);
-            // diceRigibody.AddForce(new Vector3(110,10,10));
-            int x = Random.Range(0, 2);
-            int y = Random.Range(0, 2);
-            int z = Random.Range(0, 2);
-
-            diceRigibody.transform.Rotate(new Vector3(x, y, z), Angle);
-            yield return null;
-            CurrentTime += Time.deltaTime;
-            Angle -= Angle * 0.01f * Time.deltaTime;
-        }
-        // diceRigibody.rotation=Quaternion.identity;
-        //1
-        // diceRigibody.Rotate(new Vector3(274f,270,270));
-
-        diceRigibody.rotation = StaticDiceRotation[expectedValue - 1];
-
-        yield return new WaitForSeconds(1f);
-        Debug.Log($"Dice Value [{GetDiceValueRayCast()}]");
-    }
-
-    int GetDiceCount()
-    {
-        float[] resultArray = new float[6];
-        float result;
-        result = Vector3.Dot(diceRigibody.transform.forward, Vector3.up);
-        resultArray[0] = result;
-        if (result > 1)
-            return 5;
-        result = Vector3.Dot(-diceRigibody.transform.forward, Vector3.up);
-        resultArray[1] = result;
-        if (result > 1)
-            return 2;
-        result = Vector3.Dot(diceRigibody.transform.up, Vector3.up);
-        resultArray[2] = result;
-        if (result > 1)
-            return 3;
-        result = Vector3.Dot(-diceRigibody.transform.up, Vector3.up);
-        resultArray[3] = result;
-        if (result > 1)
-            return 4;
-        result = Vector3.Dot(diceRigibody.transform.right, Vector3.up);
-        resultArray[4] = result;
-        if (result > 1)
-            return 6;
-        result = Vector3.Dot(-diceRigibody.transform.right, Vector3.up);
-        resultArray[5] = result;
-        if (result > 1)
-            return 1;
-        SpicyHarissaLogger.LogErrorCritical("No Dice face????");
-        return 0;
-    }
-
-    private int GetDiceValueRayCast()
-    {
-        Ray ray = new Ray();
-
-        ray.direction = Camera.main.transform.position.GetDirection(diceRigibody.transform.position);
-        ray.origin = Camera.main.transform.position;
-        // Bit shift the index of the layer (8) to get a bit mask
-        int layerMask = 1 << 3;
-        if (Physics.Raycast(ray, out RaycastHit hitInfo, 50, layerMask))
-        {
-            Debug.Log($"Hit smth name [ {hitInfo.collider.name} ]");
-            return 0;
-        }
-
-        return 0;
-        // Camera.main.
-    }
 
     private void OnDrawGizmosSelected()
     {
-        Ray ray = new Ray();
-        ray.direction = Camera.main.transform.position.GetDirection(diceRigibody.transform.position);
-        ray.origin = Camera.main.transform.position;
-        Gizmos.DrawRay(ray);
+        if (EditorApplication.isPlaying)
+        {
+            Vector3 Tile0 = GameManager.TileManager[39].transform.position;
+            Quaternion tile0Angle = GameManager.TileManager[39].transform.rotation;
+            Vector3 tile9 = GameManager.TileManager[9].transform.position;
+            Quaternion tile9Angle = GameManager.TileManager[9].transform.rotation;
+            firstLineDis = Vector3.Distance(Tile0, tile9);
+            firstLineAngle = Quaternion.Angle(tile0Angle, tile9Angle);
+            Gizmos.DrawLine(Tile0, tile9);
+
+            Vector3 Tile19 = GameManager.TileManager[19].transform.position;
+            Quaternion tile19Angle = GameManager.TileManager[19].transform.rotation;
+            secondLineAngle = Quaternion.Angle(tile9Angle, tile19Angle);
+            secondLineDis = Vector3.Distance(tile9, Tile19);
+            Gizmos.DrawLine(tile9, Tile19);
+
+            Vector3 Tile29 = GameManager.TileManager[29].transform.position;
+            Quaternion tile29Angle = GameManager.TileManager[29].transform.rotation;
+            thirdLineDis = Vector3.Distance(Tile19, Tile29);
+            thirdLineAngle = Quaternion.Angle(tile19Angle, tile29Angle);
+            Gizmos.DrawLine(Tile19, Tile29);
+
+            // Vector3 Tile29 = GameManager.TileManager[29].transform.position;
+            fourthLineDis = Vector3.Distance(Tile29, Tile0);
+            fourthLineAngle = Quaternion.Angle(tile29Angle, tile0Angle);
+            Gizmos.DrawLine(Tile29, Tile0);
+        }
+
+  
     }
 
     private void PlayerBuyLand(Player player)

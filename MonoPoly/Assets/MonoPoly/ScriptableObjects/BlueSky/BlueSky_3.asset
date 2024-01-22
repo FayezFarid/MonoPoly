@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: BlueSky_3
   m_EditorClassIdentifier: 
   landMaterial: {fileID: 2100000, guid: 33205894b23f9d54eb1286f26b379b3c, type: 2}
-  landName: 7ay menzah 2
-  landValue: 120
+  landName: 7ay menzah 3
+  landValue: 140
   mortgageRevenue: 40
   redeemFee: 50
   landType: 2
-  rent: 32000000c80000002c01000090010000bc020000
+  IsFinalTile: 0
+  rent: 1400000050000000be0000002602000020030000

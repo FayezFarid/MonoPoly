@@ -49,7 +49,6 @@ MonoBehaviour:
   initalMoney: 2000
   wholeLoopMoney: 200
   prisonFee: 100
-  playersNumber: 4
   numberOfDices: 2
   diceRollTime: 1.5
   PlayerMovementSpeed: 20
@@ -59,3 +58,8 @@ MonoBehaviour:
   DelayToCloseEventDescription: 3
   UseAppropriateColors: 1
   DelayBetweenAction: 4
+  RunTimePlayerDatas:
+  - Name: Player 1
+  - Name: Player 2
+  - Name: Player 3
+  - Name: Player 4

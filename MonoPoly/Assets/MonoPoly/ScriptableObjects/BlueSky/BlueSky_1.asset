@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   landMaterial: {fileID: 2100000, guid: 33205894b23f9d54eb1286f26b379b3c, type: 2}
   landName: 7ay menzah
-  landValue: 100
+  landValue: 120
   mortgageRevenue: 40
   redeemFee: 50
   landType: 2
-  rent: 07000000460000008c000000dc000000c2010000
+  IsFinalTile: 0
+  rent: 0f00000046000000a0000000e0010000bc020000

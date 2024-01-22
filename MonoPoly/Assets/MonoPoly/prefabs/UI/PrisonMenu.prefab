@@ -466,6 +466,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7021142352145359713, guid: f1d8b25ff6dc97245b6d8af5bf90d1d6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8765174202779925474, guid: f1d8b25ff6dc97245b6d8af5bf90d1d6, type: 3}
       propertyPath: m_Name
       value: PrisonMenu

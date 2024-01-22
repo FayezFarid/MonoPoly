@@ -18,4 +18,5 @@ MonoBehaviour:
   mortgageRevenue: 40
   redeemFee: 50
   landType: 0
-  rent: 07000000460000008c000000dc000000c2010000
+  IsFinalTile: 1
+  rent: 070000004b000000b400000004010000c2010000

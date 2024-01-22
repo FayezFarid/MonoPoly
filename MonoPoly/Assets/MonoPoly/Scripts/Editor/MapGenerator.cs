@@ -8,14 +8,21 @@ using Object = UnityEngine.Object;
 
 public class MapGenerator : EditorWindow
 {
+    // public static Vector3[] SpriteRenderPositions = new Vector3[4]
+    //     { new Vector3(0, 0, 0.75f), new Vector3(0.75f, 0, 0), new Vector3(-0.75F, 0, 0), new Vector3(0, 0, -0.75f) };
     public static Vector3[] SpriteRenderPositions = new Vector3[4]
-        { Vector3.zero, new Vector3(0.75f, 0, 0), new Vector3(-0.75F, 0, 0), new Vector3(0, 0, -0.75f) };
+        { new Vector3(0, 0, 0.75f), new Vector3(0, 0, 0.75f), new(0, 0, -0.75f), new(0, 0, 0.75f) };
 
     public static Vector3[] HouseRenderPositions = new Vector3[4]
         { Vector3.zero, new Vector3(0.25f, 0, 0), new Vector3(-0.25f, 0, 0), new Vector3(0, 0, -0.25f) };
 
     public static int[] HouseRenderAngles = new int[4] { 0, 90, 270, 180 };
 
+    public static float HOUSE_ICONIC_0_3 = 0.3f;
+    public float ICONIC_0_5 = 0.5f;
+    public float RENDER_POSITION = 0.75f;
+    private List<Tile> _tiles = new List<Tile>();
+    private List<GameObject> _parentsObjects = new List<GameObject>();
 
     public GameObject EventTilePrefab;
     public GameObject LandPreFabTile;
@@ -24,7 +31,6 @@ public class MapGenerator : EditorWindow
     public GameObject Parent;
 
     public Vector3 TileSize = new Vector3(4, 0.1f, 4);
-    public Vector3 TileSizeHorz = new Vector3(5, 0.1f, 7);
     public Vector3 CornerTileSize;
 
     public Vector3 startingPosition = Vector3.zero;
@@ -36,6 +42,7 @@ public class MapGenerator : EditorWindow
     public int StartingIndex = 0;
 
     public int LanePosition = 0;
+
 
     [MenuItem("SpicyHarissa/BoardGenerator")]
     public static void ShowWindow()
@@ -61,7 +68,6 @@ public class MapGenerator : EditorWindow
         EditorGUILayout.Space();
 
         TileSize = EditorGUILayout.Vector3Field("Tile Size", TileSize);
-        TileSizeHorz = EditorGUILayout.Vector3Field("Tile Size horztional", TileSizeHorz);
         CornerTileSize = EditorGUILayout.Vector3Field("Corner tile size", CornerTileSize);
 
         Lanes = (Lane)EditorGUILayout.ObjectField("Lane", Lanes, typeof(Lane), true);
@@ -80,6 +86,14 @@ public class MapGenerator : EditorWindow
         {
             CreateBoardNew();
         }
+
+        if (GUILayout.Button("Delete Board"))
+        {
+            foreach (var VARIABLE in _parentsObjects)
+            {
+                MonoBehaviour.DestroyImmediate(VARIABLE.gameObject);
+            }
+        }
     }
 
 
@@ -91,6 +105,8 @@ public class MapGenerator : EditorWindow
     public void CreateBoardNew()
     {
         Vector3 position = startingPosition;
+        ICONIC_0_5 = CornerTileSize.x - TileSize.x;
+        ICONIC_0_5 /= 2;
         int startingIndex = 0;
 
         GameObject firstLaneParent = new GameObject("First Lane");
@@ -99,9 +115,9 @@ public class MapGenerator : EditorWindow
         Debug.Log($"First position = {position}");
 
         //IDk why but this seems to work
-        position.z +=  TileSizeHorz.z - 0.5f;
+        position.z += TileSize.z - ICONIC_0_5;
         position.x += CornerTileSize.x;
-        
+
         startingIndex += 10;
         GameObject secondLaneParent = new GameObject("Second Lane");
         secondLaneParent.transform.position = new Vector3(0, 0.1f, 0);
@@ -109,7 +125,7 @@ public class MapGenerator : EditorWindow
         CreateALane(ref position, 1, secondLaneParent, startingIndex);
 
         position.z -= CornerTileSize.z;
-        position.x += CornerTileSize.x - 0.5f;
+        position.x += CornerTileSize.x - ICONIC_0_5;
 
         Debug.Log($"Second position = {position}");
 
@@ -118,7 +134,7 @@ public class MapGenerator : EditorWindow
         thirdLaneParent.transform.position = new Vector3(0, 0.1f, 0);
         CreateALane(ref position, 2, thirdLaneParent, startingIndex);
 
-        position.z -= CornerTileSize.z-0.5f;
+        position.z -= CornerTileSize.z - ICONIC_0_5;
         position.x -= CornerTileSize.x;
         Debug.Log($"Third position = {position}");
 
@@ -127,10 +143,22 @@ public class MapGenerator : EditorWindow
         fourthLaneParent.transform.position = new Vector3(0, 0.1f, 0);
         CreateALane(ref position, 3, fourthLaneParent, startingIndex);
         Debug.Log($"Fourth position = {position}");
+
+        _parentsObjects.Add(firstLaneParent);
+        _parentsObjects.Add(secondLaneParent);
+        _parentsObjects.Add(thirdLaneParent);
+        _parentsObjects.Add(fourthLaneParent);
     }
 
 
     private bool IsHorzIndex(int index) => index is 1 or 3;
+
+    private int GetHorzRotationSign(int index)
+    {
+        if (index == 1)
+            return 1;
+        return -1;
+    }
 
     private int GetSign(int index)
     {
@@ -142,23 +170,31 @@ public class MapGenerator : EditorWindow
     public void CreateALane(ref Vector3 StartingPosition, int laneIndex, GameObject parent, int additonalIndex)
     {
         Lanes.OnAfterDeserialize();
-
-        for (int i = 0; i < 10; i++)
+        TileDefinition tileDefinition;
+        Object obj;
+        GameObject TileGO;
+        float valueToAdd;
+        Vector3 tileSize;
+        Tile tile;
+        for (int i = 0; i < 9; i++)
         {
-            TileDefinition tileDefinition = Lanes.LanesDefinitions[laneIndex][i];
-            Object obj = PrefabUtility.InstantiatePrefab(GetCorrespendingObject(tileDefinition));
-            GameObject TileGO = (GameObject)obj;
+            tileDefinition = Lanes.LanesDefinitions[laneIndex][i];
+            obj = PrefabUtility.InstantiatePrefab(GetCorrespendingObject(tileDefinition));
+            TileGO = (GameObject)obj;
 
-            float valueToAdd = i == 9 ? CornerTileSize.x : TileSizeHorz.x;
+            valueToAdd = TileSize.x;
             valueToAdd *= GetSign(laneIndex);
-            Vector3 tileSize = i == 9 ? CornerTileSize : TileSizeHorz;
+            tileSize = TileSize;
 
             SetGameObjectStandard(TileGO, parent.transform, ref StartingPosition, valueToAdd, !IsHorzIndex(laneIndex),
                 tileSize);
 
-            if (i != 9 && IsHorzIndex(laneIndex))
-                TileGO.transform.Rotate(Vector3.up, 90);
-            Tile tile = TileGO.GetComponent<Tile>();
+            if (IsHorzIndex(laneIndex))
+            {
+                TileGO.transform.Rotate(Vector3.up, 90 * GetHorzRotationSign(laneIndex));
+            }
+
+            tile = TileGO.GetComponent<Tile>();
 
             SetupInformation(tile, tileDefinition, i + additonalIndex);
             SetTileType(tile, tileDefinition);
@@ -168,13 +204,43 @@ public class MapGenerator : EditorWindow
                 TileLand tileLand = (TileLand)tile;
                 LandSpriteAndHouses(TileGO, tileLand, laneIndex);
             }
+
+            _tiles.Add(tile);
         }
+
+        float ExtraPadding = ICONIC_0_5 * GetSign(laneIndex);
+        if (IsHorzIndex(laneIndex))
+        {
+            StartingPosition.z += ExtraPadding;
+        }
+        else
+        {
+            StartingPosition.x += ExtraPadding;
+        }
+
+
+        int cornerIndex = 9;
+        tileDefinition = Lanes.LanesDefinitions[laneIndex][9];
+        obj = PrefabUtility.InstantiatePrefab(GetCorrespendingObject(tileDefinition));
+        TileGO = (GameObject)obj;
+
+        valueToAdd = CornerTileSize.x;
+        valueToAdd *= GetSign(laneIndex);
+        tileSize = CornerTileSize;
+
+        SetGameObjectStandard(TileGO, parent.transform, ref StartingPosition, valueToAdd, !IsHorzIndex(laneIndex),
+            tileSize);
+
+        tile = TileGO.GetComponent<Tile>();
+
+        SetupInformation(tile, tileDefinition, cornerIndex + additonalIndex);
+        SetTileType(tile, tileDefinition);
     }
 
     private void LandSpriteAndHouses(GameObject tileGO, TileLand tileLand, int laneIndex)
     {
         SetSpriteRender(tileGO, SpriteRenderPositions[laneIndex]);
-        SetHouse(tileLand, HouseRenderPositions[laneIndex], HouseRenderAngles[laneIndex]);
+        SetHouse(tileLand,laneIndex);
     }
 
 
@@ -228,6 +294,10 @@ public class MapGenerator : EditorWindow
         }
 
         EventTileDefinition eventTileDefinition = (EventTileDefinition)tileDefinition;
+        if (eventTileDefinition.eventType == EventType.Parking)
+        {
+            tile.TitleType = TitleType.Parking;
+        }
 
         if (eventTileDefinition.eventType == EventType.Start)
         {
@@ -248,16 +318,19 @@ public class MapGenerator : EditorWindow
         tile.gameObject.name = $"Tile_{tile.PositionInMap}_{tile.TitleDefinition.name}";
     }
 
-    private void SetHouse(TileLand tileLand, Vector3 Pos, float RotationAngle)
+    private int IsNegativeHouseZ(int index) => index == 2 ? -1 : 1;
+    private void SetHouse(TileLand tileLand, int localIndex)
     {
         Transform transform = tileLand.HouseMesh.transform;
 
-        if (Pos != Vector3.zero)
-            transform.localPosition = Pos;
-        if (RotationAngle != 0)
-            transform.Rotate(new Vector3(0, 1, 0), RotationAngle);
+        transform.localPosition = new Vector3(0, 0, HOUSE_ICONIC_0_3 *IsNegativeHouseZ(localIndex));
+        // if (Pos != Vector3.zero)
+        //     transform.localPosition = Pos;
+        // if (RotationAngle != 0)
+        //     transform.Rotate(new Vector3(0, 1, 0), RotationAngle);
 
 
+        //Scale
         Vector3 localPos = transform.localScale;
         localPos.y = 3;
         transform.localScale = localPos;

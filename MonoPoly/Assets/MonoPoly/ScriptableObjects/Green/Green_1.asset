@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   landMaterial: {fileID: 2100000, guid: 8cfa5468d27a1dd4082252b20feae166, type: 2}
   landName: A F H  NIGGAS
-  landValue: 130
+  landValue: 160
   mortgageRevenue: 100
   redeemFee: 110
   landType: 3
-  rent: 320000004600000064000000c8000000bc020000
+  IsFinalTile: 0
+  rent: 190000005a000000b40000006c02000020030000

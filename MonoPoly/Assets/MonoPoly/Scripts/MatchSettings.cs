@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.Serialization;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 //TODO: Add static
 [CreateAssetMenu(menuName = "Monopoly/MatchSettings")]
 public class MatchSettings : ScriptableObject
@@ -114,3 +116,21 @@ public class MatchSettings : ScriptableObject
 
     #endregion
 }
+#if UNITY_EDITOR
+[CustomEditor(typeof(MatchSettings))]
+public class MatchSettingInspector : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
+        if (GUILayout.Button("Add 4 players"))
+        {
+            MatchSettings thisTarget= target as MatchSettings;
+            for (int i = 0; i < 4; i++)
+            {
+                thisTarget.RunTimePlayerDatas.Add(new MatchSettings.RunTimePlayerData(){Name = $"Player {i+1}"});
+            }
+        }
+    }
+}
+#endif

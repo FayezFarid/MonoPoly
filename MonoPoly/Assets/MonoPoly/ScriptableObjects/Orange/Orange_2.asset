@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   landMaterial: {fileID: 2100000, guid: 31aeccfc9d6671d4fa878e58c7458b24, type: 2}
   landName: Exepction null reference fi zok omik 2
-  landValue: 300
+  landValue: 320
   mortgageRevenue: 250
   redeemFee: 280
   landType: 6
-  rent: 3c000000c80000009001000020030000b0040000
+  IsFinalTile: 0
+  rent: 41000000b4000000f4010000c003000014050000

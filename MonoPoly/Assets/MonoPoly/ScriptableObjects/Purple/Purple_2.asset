@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   landMaterial: {fileID: 2100000, guid: 95096b7ea96ef5440a5407bcc2bf87b6, type: 2}
   landName: Purple haze 2
-  landValue: 200
+  landValue: 280
   mortgageRevenue: 150
   redeemFee: 160
   landType: 5
-  rent: 3c000000c800000090010000bc02000084030000
+  IsFinalTile: 0
+  rent: 380000008c000000a4010000480300004c040000

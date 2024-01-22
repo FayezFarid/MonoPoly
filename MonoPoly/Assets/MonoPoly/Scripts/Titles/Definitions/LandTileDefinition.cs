@@ -21,14 +21,14 @@ public static class LandStaticInformation
 {
     public static Dictionary<LandTypes, int> LandType_Upgrade = new Dictionary<LandTypes, int>()
     {
-        { LandTypes.Blue, 50 },
-        { LandTypes.Brown, 50 },
+        { LandTypes.Blue, 25 },
+        { LandTypes.Brown, 30 },
         { LandTypes.BlueSky, 100 },
-        { LandTypes.Green, 100 },
+        { LandTypes.Green, 120 },
         { LandTypes.Yellow, 150 },
         { LandTypes.Purple, 150 },
         { LandTypes.Orange, 200 },
-        { LandTypes.Red, 200 },
+        { LandTypes.Red, 220 },
     };
 
     public static Color ColorBrown = new Color(85, 47, 0);
@@ -98,10 +98,21 @@ public class LandTileDefinition : TileDefinition
     [SerializeField] protected int mortgageRevenue;
     [SerializeField] protected int redeemFee;
     [SerializeField] protected LandTypes landType;
+    [SerializeField] private bool IsFinalTile;
 
     [Header("Don't fill for station")] [SerializeField]
     protected int[] rent;
+    
 
+    // private void OnEnable()
+    // {
+    //     rent = new int[5];
+    //     rent[0] = landValue / 5;
+    //     rent[1] = landValue / 2;
+    //     rent[2] = Mathf.FloorToInt(landValue * 1.5f) ;
+    //     rent[3] = Mathf.FloorToInt(landValue * 3) ;
+    //     rent[4] = Mathf.FloorToInt(landValue * 5) ;
+    // }
 
     public string LandName => landName;
 

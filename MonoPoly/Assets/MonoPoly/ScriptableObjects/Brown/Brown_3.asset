@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Brown_3
   m_EditorClassIdentifier: 
   landMaterial: {fileID: 2100000, guid: cfa2be002b437ca4183bb71aa706181f, type: 2}
-  landName: tarkint omik
-  landValue: 50
+  landName: tarkint omik 3
+  landValue: 90
   mortgageRevenue: 50
   redeemFee: 60
   landType: 1
-  rent: 3200000064000000c80000002c01000058020000
+  IsFinalTile: 0
+  rent: 0f0000004100000096000000900100008a020000

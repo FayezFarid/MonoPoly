@@ -73,12 +73,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PrisonMenu prisonMenu;
 
     [SerializeField] private MatchSettings matchSettings;
-    [Header("Dice")] [SerializeField] private Dice dice;
-#if UNITY_EDITOR
-    public Dice Dice => dice;
-#endif
-    [SerializeField] private Rigidbody diceRigibody;
-    [SerializeField] private int SpinDuration = 5;
+    
 
     #endregion
 

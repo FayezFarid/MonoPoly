@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Red_2
   m_EditorClassIdentifier: 
   landMaterial: {fileID: 2100000, guid: 24ba72e19181d684daec52747fb4597b, type: 2}
-  landName: 9alsoun fayez 1
+  landName: 9alsoun fayez 2
   landValue: 400
   mortgageRevenue: 350
   redeemFee: 380
   landType: 7
-  rent: 50000000bc02000084030000b0040000d0070000
+  IsFinalTile: 0
+  rent: 64000000dc0000006c0200007805000034080000
