@@ -122,10 +122,12 @@ public class LandTileDefinition : TileDefinition
     public virtual int MoneyToUpgrade => LandStaticInformation.LandType_Upgrade[LandType];
     public virtual int MoneyFromSellHouse => LandStaticInformation.LandType_Upgrade[LandType] / 2;
 
-    public int MortgageRevenue => mortgageRevenue;
-
-    public int RedeemFee => redeemFee;
-
+    // public int MortgageRevenue => mortgageRevenue;
+    public int MortgageRevenue =>Mathf.CeilToInt(landValue*0.5f)  ;
+    
+    public int RedeemFee => Mathf.FloorToInt(landValue*0.6f) ;
+    // public int RedeemFee => redeemFee;
+    
     public virtual int[] Rent => rent;
 
     public LandTypes LandType => landType;

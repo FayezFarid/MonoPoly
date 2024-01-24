@@ -43,6 +43,7 @@ MonoBehaviour:
   PlayerLostColor: {r: 1, g: 0, b: 0, a: 1}
   PlayerTurnColor: {r: 0, g: 1, b: 0, a: 1}
   playerInfoCard: {fileID: 6655479004032260836, guid: f2b72de428c83114ea2783495605001f, type: 3}
+  oneTextCard: {fileID: 5023331832104615253, guid: 72b4ae9bd2290a24c9b001b7b2bafc2f, type: 3}
   dicePrefab: {fileID: 4736684505242452204, guid: c7675d177a715e348afc15f0fd5012b2, type: 3}
   playerPrefab: {fileID: 8596901552655055376, guid: 16122a274c2438c499fae0765c18ec6c, type: 3}
   moneyCardPopUpPrefab: {fileID: 7857193400223157405, guid: c387340fc65a52840bc72c2c2df3af1c, type: 3}

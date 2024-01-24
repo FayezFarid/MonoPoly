@@ -17,6 +17,7 @@ public class AuctionMenu : MenuBase
 
     [SerializeField] private GameObject auctionEndedPanel;
     [SerializeField] private TextMeshProUGUI playerWonText;
+    [SerializeField] private LandInformationMenu _landInformationMenu;
 
     // [SerializeField] private Button nextBid;
 
@@ -69,7 +70,11 @@ public class AuctionMenu : MenuBase
 
         _playerInfoCardsMap[_initHandle.ActivePlayers[currentPlayerIndex.CurrentIndex]]
             .ChangeParentImageColor(Color.green);
+        
+        
+        _landInformationMenu.Init(new InitalizationHandle<LandTitleInstance>(_initHandle.TitleInstance));
         gameObject.SetActive(true);
+        
     }
 
 

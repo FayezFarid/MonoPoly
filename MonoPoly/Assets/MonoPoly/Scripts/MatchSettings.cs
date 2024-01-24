@@ -49,7 +49,9 @@ public class MatchSettings : ScriptableObject
     public Color PlayerTurnColor;
 
 
-    [Header("prefabs")] [SerializeField] private SmallPlayerInfoCard playerInfoCard;
+    [Header("prefabs")] 
+    [SerializeField] private SmallPlayerInfoCard playerInfoCard;
+    [SerializeField] private SmallPlayerInfoCard oneTextCard;
     [SerializeField] private GameObject dicePrefab;
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private MoneyPopCard moneyCardPopUpPrefab;
@@ -58,6 +60,8 @@ public class MatchSettings : ScriptableObject
     /// Mini player prefab
     /// </summary>
     public SmallPlayerInfoCard PlayerInfoCard => playerInfoCard;
+
+    public SmallPlayerInfoCard OneTextCard => oneTextCard;
 
     public GameObject PlayerPrefab => playerPrefab;
 
