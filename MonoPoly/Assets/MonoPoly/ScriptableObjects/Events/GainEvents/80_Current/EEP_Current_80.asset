@@ -9,9 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37a4902b67dbd134a9ebadb309930de7, type: 3}
-  m_Name: ED_Gain_100
+  m_Script: {fileID: 11500000, guid: d7f669a6624a3754085984dcbba99841, type: 3}
+  m_Name: EEP_Current_80
   m_EditorClassIdentifier: 
-  Description: STONKS 100 to <color=green> current player</color>
   EffectModifiers:
-  - {fileID: 11400000, guid: d6339f6b76201a4408c9208c4e0ad7c0, type: 2}
+  - playerTarget: 1
+    SecondaryPlayerTarget: 0
+    modifierType: 2
+    value: 80

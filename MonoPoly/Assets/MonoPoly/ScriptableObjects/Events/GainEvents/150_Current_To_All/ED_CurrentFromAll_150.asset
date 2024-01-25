@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 37a4902b67dbd134a9ebadb309930de7, type: 3}
-  m_Name: ED_AllPlayerFromCurrent_50
+  m_Name: ED_CurrentFromAll_150
   m_EditorClassIdentifier: 
-  Description: STONKS 50 All from current
+  Description: STONKS 150 to Current player from all
   EffectModifiers:
-  - {fileID: 11400000, guid: 616145f8be019c84eaed1ca5f4ca8758, type: 2}
+  - {fileID: 11400000, guid: 7d94e5a167f9dd844be3b7385f19f3c2, type: 2}

@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LandInformationMenu : MenuBase
 {
     public static string LAND_VALUE = "Land Value: ";
     public static string LAND_NULL_UPGRADES = "Empty Land Rent: ";
+    [SerializeField] private Image landColor;
     [SerializeField] private TextMeshProUGUI landName;
     [SerializeField] private Transform body;
     [SerializeField] private TextMeshProUGUI mortgageText;
@@ -22,6 +24,7 @@ public class LandInformationMenu : MenuBase
         LandTitleInstance landTitleInstance = (LandTitleInstance)(handle.Data as object);
 
         landName.text = landTitleInstance.LandDef.LandName;
+        landColor.color = MatchSettings.SingletonInstance.GetColorFromLandType(landTitleInstance.LandDef.LandType);
         //requires brain cells idc just recreate
         //Create new
         // if (_infoCards.Count < landTitleInstance.LandDef.Rent.Length)
@@ -41,7 +44,7 @@ public class LandInformationMenu : MenuBase
             i++;
             for (; i < landTitleInstance.LandDef.Rent.Length; i++)
             {
-                CreateLandInfo(MatchSettings.SingletonInstance.LandColors[i - 1], landTitleInstance.LandDef.Rent[i]);
+                CreateLandInfo(MatchSettings.SingletonInstance.LandImprovementsColors[i - 1], landTitleInstance.LandDef.Rent[i]);
             }
         // } //Use already existing 
         // else

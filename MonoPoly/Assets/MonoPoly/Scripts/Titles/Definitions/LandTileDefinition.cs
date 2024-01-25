@@ -6,15 +6,15 @@ using UnityEngine;
 
 public enum LandTypes
 {
-    Blue,
-    Brown,
-    BlueSky,
-    Green,
-    Yellow,
-    Purple,
-    Orange,
-    Red,
-    Station,
+    Blue=0,
+    Brown=1,
+    BlueSky=2,
+    Green=3,
+    Yellow=4,
+    Purple=5,
+    Orange=6,
+    Red=7,
+    Station=8,
 }
 
 public static class LandStaticInformation
@@ -30,60 +30,60 @@ public static class LandStaticInformation
         { LandTypes.Orange, 200 },
         { LandTypes.Red, 220 },
     };
-
+    // public static Color GetColorFromLandType(LandTypes landType)
+    // {
+    //     if (landType == LandTypes.Blue)
+    //     {
+    //         return Color.blue;
+    //     }
+    //
+    //     if (landType == LandTypes.Brown)
+    //     {
+    //         return ColorBrown;
+    //     }
+    //
+    //     if (landType == LandTypes.BlueSky)
+    //     {
+    //         return Color.cyan;
+    //     }
+    //
+    //     if (landType == LandTypes.Green)
+    //     {
+    //         return Color.green;
+    //     }
+    //
+    //     if (landType == LandTypes.Yellow)
+    //     {
+    //         return Color.yellow;
+    //     }
+    //
+    //     if (landType == LandTypes.Purple)
+    //     {
+    //         return ColorPurple;
+    //     }
+    //
+    //     if (landType == LandTypes.Orange)
+    //     {
+    //         return ColorOrange;
+    //     }
+    //
+    //     if (landType == LandTypes.Red)
+    //     {
+    //         return Color.red;
+    //     }
+    //
+    //     if (landType == LandTypes.Station)
+    //     {
+    //         return Color.white;
+    //     }
+    //
+    //     return Color.black;
+    // }
     public static Color ColorBrown = new Color(85, 47, 0);
     public static Color ColorPurple = new Color(128, 0, 128);
     public static Color ColorOrange = new Color(255, 140, 0);
 
-    public static Color GetColorFromLandType(LandTypes landType)
-    {
-        if (landType == LandTypes.Blue)
-        {
-            return Color.blue;
-        }
-
-        if (landType == LandTypes.Brown)
-        {
-            return ColorBrown;
-        }
-
-        if (landType == LandTypes.BlueSky)
-        {
-            return Color.cyan;
-        }
-
-        if (landType == LandTypes.Green)
-        {
-            return Color.green;
-        }
-
-        if (landType == LandTypes.Yellow)
-        {
-            return Color.yellow;
-        }
-
-        if (landType == LandTypes.Purple)
-        {
-            return ColorPurple;
-        }
-
-        if (landType == LandTypes.Orange)
-        {
-            return ColorOrange;
-        }
-
-        if (landType == LandTypes.Red)
-        {
-            return Color.red;
-        }
-
-        if (landType == LandTypes.Station)
-        {
-            return Color.white;
-        }
-
-        return Color.black;
-    }
+    
 }
 
 [CreateAssetMenu(menuName = "Monopoly/Land Title Definition")]

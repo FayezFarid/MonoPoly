@@ -34,7 +34,10 @@ public class SmallLandCard : CardBase
     }
     private void Init(SmallLandCardInitHandle handle)
     {
-        colorImage.color = LandStaticInformation.GetColorFromLandType(handle.Land.LandDef.LandType);
+   
+       
+        // colorImage.color = LandStaticInformation.GetColorFromLandType(handle.Land.LandDef.LandType);
+        colorImage.color =  MatchSettings.SingletonInstance.GetColorFromLandType(handle.Land.LandDef.LandType);
         this.landName.text = handle.Land.LandDef.LandName;
         this.initialValue.text = handle.Land.LandDef.LandValue.ToString();
         _landTitleInstance = handle.Land;

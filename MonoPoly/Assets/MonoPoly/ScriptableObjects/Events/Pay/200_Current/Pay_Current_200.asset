@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Description: ko7  200
   EffectModifiers:
-  - {fileID: 11400000, guid: cbc8578bf0602424fad993c766ecc863, type: 2}
+  - {fileID: 11400000, guid: bf3fe73b6a931cb41bdb016419e97cad, type: 2}

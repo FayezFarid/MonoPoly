@@ -15,7 +15,6 @@ MonoBehaviour:
   landMaterial: {fileID: 2100000, guid: b77a316015edf0443a7e84d2304a20e9, type: 2}
   eventType: 0
   eventDefinitions:
-  - {fileID: 11400000, guid: 2ea3c67bad4d12a46aac728416c613ec, type: 2}
   - {fileID: 11400000, guid: 946bc1092822870438e3b3b45c1fec79, type: 2}
   - {fileID: 11400000, guid: 01b8d0a890c7f9e4aa781f4254aead03, type: 2}
   - {fileID: 11400000, guid: dfbe944437292eb4596a7900d8961c4e, type: 2}

@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 37a4902b67dbd134a9ebadb309930de7, type: 3}
-  m_Name: ED_Gain_100
+  m_Name: ED_Pay_80
   m_EditorClassIdentifier: 
-  Description: STONKS 100 to <color=green> current player</color>
+  Description: ' ko7  <color=red> Current </color> [80]'
   EffectModifiers:
-  - {fileID: 11400000, guid: d6339f6b76201a4408c9208c4e0ad7c0, type: 2}
+  - {fileID: 11400000, guid: 1a003e793e8d718458b00da4faf93324, type: 2}

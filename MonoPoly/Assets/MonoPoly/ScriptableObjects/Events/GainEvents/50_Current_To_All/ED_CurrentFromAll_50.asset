@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37a4902b67dbd134a9ebadb309930de7, type: 3}
   m_Name: ED_CurrentFromAll_50
   m_EditorClassIdentifier: 
-  Description: STONKS 100 to Current player from all
+  Description: STONKS 50 to <color=green> Current </color>  player from <color=red>
+    al </color>l
   EffectModifiers:
   - {fileID: 11400000, guid: 7f08f4bf45421b7478ec6b77f7010141, type: 2}

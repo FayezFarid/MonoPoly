@@ -207,7 +207,7 @@ public class TileManager : MonoBehaviour
 
         tileInstance.TileLand.HouseMesh.gameObject.SetActive(true);
         tileInstance.TileLand.HouseMesh.material.color =
-            MatchSettings.SingletonInstance.LandColors[tileInstance.CurrentRank - 1];
+            MatchSettings.SingletonInstance.LandImprovementsColors[tileInstance.CurrentRank - 1];
         // MatchSettings.SingletonInstance.LandColors
         // landTitleInstance.TileLand.HouseMesh.material.color=Color.black;
     }

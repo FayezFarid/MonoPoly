@@ -354,7 +354,8 @@ public class ScreenMode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             if (item.TitleType == TitleType.Land)
             {
                 LandTitleInstance landTitleInstance = (LandTitleInstance)item.TileInstance;
-                item.SetTileMatColor(LandStaticInformation.GetColorFromLandType(landTitleInstance.LandDef.LandType));
+                // item.SetTileMatColor(LandStaticInformation.GetColorFromLandType(landTitleInstance.LandDef.LandType));
+                item.SetTileMatColor(MatchSettings.SingletonInstance.GetColorFromLandType(landTitleInstance.LandDef.LandType));
             }
         }
     }
@@ -382,8 +383,9 @@ public class ScreenMode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                 if (MatchSettings.SingletonInstance.UseAppropriateColors)
                 {
                     LandTitleInstance landTitleInstance = (LandTitleInstance)item.TileInstance;
-                    item.SetTileMatColor(
-                        LandStaticInformation.GetColorFromLandType(landTitleInstance.LandDef.LandType));
+                    item.SetTileMatColor(MatchSettings.SingletonInstance.GetColorFromLandType(landTitleInstance.LandDef.LandType));
+                    // item.SetTileMatColor(
+                    //     LandStaticInformation.GetColorFromLandType(landTitleInstance.LandDef.LandType));
                     continue;
                 }
             }

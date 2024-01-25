@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 37a4902b67dbd134a9ebadb309930de7, type: 3}
-  m_Name: ED_CurrentFromAll_150
+  m_Name: ED_Gain_500
   m_EditorClassIdentifier: 
-  Description: STONKS 150 current from all
+  Description: STONKS 200 to <color=green> Current </color>  l
   EffectModifiers:
-  - {fileID: 11400000, guid: 5f13473ff58784d47bce0542db999fb1, type: 2}
+  - {fileID: 11400000, guid: f989b3002c393f643adc1689bab106c5, type: 2}

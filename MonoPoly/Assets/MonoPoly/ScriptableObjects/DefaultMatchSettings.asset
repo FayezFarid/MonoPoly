@@ -30,7 +30,7 @@ MonoBehaviour:
     rgba: 4278779648
   - serializedVersion: 2
     rgba: 4294901760
-  LandColors:
+  LandImprovementsColors:
   - serializedVersion: 2
     rgba: 4294901503
   - serializedVersion: 2
@@ -42,6 +42,25 @@ MonoBehaviour:
   DefaultColor: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 0.7372549}
   PlayerLostColor: {r: 1, g: 0, b: 0, a: 1}
   PlayerTurnColor: {r: 0, g: 1, b: 0, a: 1}
+  LandColors:
+  - serializedVersion: 2
+    rgba: 4278255360
+  - serializedVersion: 2
+    rgba: 4294967040
+  - serializedVersion: 2
+    rgba: 4294901765
+  - serializedVersion: 2
+    rgba: 4278247167
+  - serializedVersion: 2
+    rgba: 4294901882
+  - serializedVersion: 2
+    rgba: 4281624252
+  - serializedVersion: 2
+    rgba: 4278232831
+  - serializedVersion: 2
+    rgba: 4278190335
+  - serializedVersion: 2
+    rgba: 4294967295
   playerInfoCard: {fileID: 6655479004032260836, guid: f2b72de428c83114ea2783495605001f, type: 3}
   oneTextCard: {fileID: 5023331832104615253, guid: 72b4ae9bd2290a24c9b001b7b2bafc2f, type: 3}
   dicePrefab: {fileID: 4736684505242452204, guid: c7675d177a715e348afc15f0fd5012b2, type: 3}

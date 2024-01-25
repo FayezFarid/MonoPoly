@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d7f669a6624a3754085984dcbba99841, type: 3}
-  m_Name: EEP_AllPlayerFromCurrent_50
+  m_Name: EEP_Current_500
   m_EditorClassIdentifier: 
   EffectModifiers:
-  - playerTarget: 2
-    SecondaryPlayerTarget: 1
+  - playerTarget: 1
+    SecondaryPlayerTarget: 0
     modifierType: 2
-    value: 50
+    value: 500

@@ -146,9 +146,12 @@ public class AIController : MonoBehaviour
         yield return new WaitForSeconds(_delayBetweenAction);
         SpicyHarissaLogger.Log($"Moving Current Player [{_gameManager.CurrentPlayer.PlayerName}] ]", LogLevel.Verbose,
             "AI");
+
+        yield return new WaitUntil(() => !_player.HaveEffectOfType(EffectType.Prison));
         //Makes sure it has not been rolled first
-        if (_gameManager.CurrentState is not (CurrentState.RollingDice and CurrentState.DiceRolled))
+        if (_gameManager.CurrentState is not (CurrentState.RollingDice or CurrentState.DiceRolled ) && currentState != State.PlayerLanded )
             _gameManager.MoveCurrentPlayer();
+        
         currentState = State.WaitingForPlayerToLand;
         //wait for player to land
         while (currentState != State.PlayerLanded)

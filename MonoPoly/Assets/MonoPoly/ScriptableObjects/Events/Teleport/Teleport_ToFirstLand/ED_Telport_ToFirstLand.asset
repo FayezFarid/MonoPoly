@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37a4902b67dbd134a9ebadb309930de7, type: 3}
   m_Name: ED_Telport_ToFirstLand
   m_EditorClassIdentifier: 
-  Description: Move to Unowned land if  there is no such land go to first land
+  Description: Move to  Unowned land if  there is no such land go to first land and
+    Pay 50%
   EffectModifiers:
   - {fileID: 11400000, guid: d8d01f763bb739449aeb4413d64c62d4, type: 2}
   - {fileID: 11400000, guid: 8e629e612b4066b43bf9e8c557f78793, type: 2}

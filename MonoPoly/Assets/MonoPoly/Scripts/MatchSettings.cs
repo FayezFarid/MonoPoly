@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Serialization;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -42,11 +43,13 @@ public class MatchSettings : ScriptableObject
 
     public Color32[] PlayerPossibleColors;
 
-    public Color32[] LandColors;
+    [FormerlySerializedAs("LandColors")] public Color32[] LandImprovementsColors;
 
     public Color DefaultColor;
     public Color PlayerLostColor;
     public Color PlayerTurnColor;
+
+    public Color32[] LandColors = new Color32[9];
 
 
     [Header("prefabs")] 
@@ -108,6 +111,12 @@ public class MatchSettings : ScriptableObject
     public bool UseAppropriateColors;
     [Header("AI")] public float DelayBetweenAction;
 
+    public Color32 GetColorFromLandType(LandTypes landType)
+    {
+        int AsIndex = (int)landType;
+        return LandColors[AsIndex];
+    }
+   
     #region RunTime
 
     [Serializable]
