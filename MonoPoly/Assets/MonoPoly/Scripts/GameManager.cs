@@ -52,9 +52,9 @@ public class GameManager : MonoBehaviour
     public ScreenMode ScreenMode => _screenMode;
 
     [SerializeField] private DiceManager _diceManager;
-#if UNITY_EDITOR
+// #if UNITY_EDITOR
     public DiceManager DiceManager => _diceManager;
-#endif
+// #endif
 
     #endregion
 
@@ -103,6 +103,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        Application.targetFrameRate = 60;
         Tile.OnTileClicked += OnLandClicked;
         PrisonStatusEffectDefinition.CurrentPlayerInPrison += CurrentPlayerInPrison;
 

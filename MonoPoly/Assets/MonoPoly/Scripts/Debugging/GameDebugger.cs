@@ -211,35 +211,37 @@ public class GameDebugger : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        if (EditorApplication.isPlaying)
+#if UNITY_EDITOR
+        if (!EditorApplication.isPlaying)
         {
-            Vector3 Tile0 = GameManager.TileManager[39].transform.position;
-            Quaternion tile0Angle = GameManager.TileManager[39].transform.rotation;
-            Vector3 tile9 = GameManager.TileManager[9].transform.position;
-            Quaternion tile9Angle = GameManager.TileManager[9].transform.rotation;
-            firstLineDis = Vector3.Distance(Tile0, tile9);
-            firstLineAngle = Quaternion.Angle(tile0Angle, tile9Angle);
-            Gizmos.DrawLine(Tile0, tile9);
-
-            Vector3 Tile19 = GameManager.TileManager[19].transform.position;
-            Quaternion tile19Angle = GameManager.TileManager[19].transform.rotation;
-            secondLineAngle = Quaternion.Angle(tile9Angle, tile19Angle);
-            secondLineDis = Vector3.Distance(tile9, Tile19);
-            Gizmos.DrawLine(tile9, Tile19);
-
-            Vector3 Tile29 = GameManager.TileManager[29].transform.position;
-            Quaternion tile29Angle = GameManager.TileManager[29].transform.rotation;
-            thirdLineDis = Vector3.Distance(Tile19, Tile29);
-            thirdLineAngle = Quaternion.Angle(tile19Angle, tile29Angle);
-            Gizmos.DrawLine(Tile19, Tile29);
-
-            // Vector3 Tile29 = GameManager.TileManager[29].transform.position;
-            fourthLineDis = Vector3.Distance(Tile29, Tile0);
-            fourthLineAngle = Quaternion.Angle(tile29Angle, tile0Angle);
-            Gizmos.DrawLine(Tile29, Tile0);
+            return;
         }
+#endif
 
-  
+        Vector3 Tile0 = GameManager.TileManager[39].transform.position;
+        Quaternion tile0Angle = GameManager.TileManager[39].transform.rotation;
+        Vector3 tile9 = GameManager.TileManager[9].transform.position;
+        Quaternion tile9Angle = GameManager.TileManager[9].transform.rotation;
+        firstLineDis = Vector3.Distance(Tile0, tile9);
+        firstLineAngle = Quaternion.Angle(tile0Angle, tile9Angle);
+        Gizmos.DrawLine(Tile0, tile9);
+
+        Vector3 Tile19 = GameManager.TileManager[19].transform.position;
+        Quaternion tile19Angle = GameManager.TileManager[19].transform.rotation;
+        secondLineAngle = Quaternion.Angle(tile9Angle, tile19Angle);
+        secondLineDis = Vector3.Distance(tile9, Tile19);
+        Gizmos.DrawLine(tile9, Tile19);
+
+        Vector3 Tile29 = GameManager.TileManager[29].transform.position;
+        Quaternion tile29Angle = GameManager.TileManager[29].transform.rotation;
+        thirdLineDis = Vector3.Distance(Tile19, Tile29);
+        thirdLineAngle = Quaternion.Angle(tile19Angle, tile29Angle);
+        Gizmos.DrawLine(Tile19, Tile29);
+
+        // Vector3 Tile29 = GameManager.TileManager[29].transform.position;
+        fourthLineDis = Vector3.Distance(Tile29, Tile0);
+        fourthLineAngle = Quaternion.Angle(tile29Angle, tile0Angle);
+        Gizmos.DrawLine(Tile29, Tile0);
     }
 
     private void PlayerBuyLand(Player player)
