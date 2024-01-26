@@ -103,7 +103,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        Application.targetFrameRate = 60;
+        // Application.targetFrameRate = 60;
         Tile.OnTileClicked += OnLandClicked;
         PrisonStatusEffectDefinition.CurrentPlayerInPrison += CurrentPlayerInPrison;
 
